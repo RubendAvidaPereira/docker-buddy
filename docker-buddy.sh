@@ -317,7 +317,7 @@ dexec() {
         printf "Usage example ---> dexec my_image"
         return
     else
-        if [[ ! $# -gt 1]]; then
+        if [[ ! $# -gt 1 ]]; then
             printf "$LRED Too much arguments passed, only 1 required.$CESC"
             printf "Usage example ---> dexec my_image"
             return
