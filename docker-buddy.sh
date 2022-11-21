@@ -56,7 +56,7 @@ dhelp() {
     Normal --->$LYELLOW docker run -it -p <ext_port:int_port> -v <ext_directory:int_directory> <container_name> --name <image_name> bash$CESC
     
     Buddy  --->$LGREEN dexec <image_name>$CESC
-    Normal --->$LYELLOW docker exec -it <image_name> bash
+    Normal --->$LYELLOW docker exec -it <image_name> bash$CESC
 
     ---------------------------------------------------------------------------------------------------------------------------------------------------
     INSPECT
@@ -96,15 +96,15 @@ dbuild() {
 
     if [[ $# -ge 1 ]]; then
         if [[ -z "$2" ]]; then
-            printf "Running docker command:\n"
-            printf "docker build -t $1 .\n"
+            #printf "Running docker command:\n"
+            #printf "docker build -t $1 .\n"
             docker build -t $1 .
             return
         fi
 
         if [[ -d "$2" ]]; then
-            printf "Running docker command:\n"
-            printf "docker build -t $1 $2\n"
+            #printf "Running docker command:\n"
+            #printf "docker build -t $1 $2\n"
             docker build -t $1 $2
             return
         else
@@ -134,13 +134,13 @@ drun() {
     if [[ $# -ge 2 ]]; then
         if [[ "$1" =~ $PORT_BIND_REGEX ]]; then
             if [ -z "$3" ]; then
-                printf "No image name passed in arguments, docker will create one random.\n"
-                printf "Running docker command:\n"
-                printf "docker run -d -p $1 $2\n"
+                #printf "No image name passed in arguments, docker will create one random.\n"
+                #printf "Running docker command:\n"
+                #printf "docker run -d -p $1 $2\n"
                 docker run -d -p $1 $2
             else
-                printf "Running docker command:\n"
-                printf "docker run -d -p $1 $2 --name $3\n"
+                #printf "Running docker command:\n"
+                #printf "docker run -d -p $1 $2 --name $3\n"
                 docker run -d -p $1 $2 --name $3
             fi
         else
@@ -197,12 +197,12 @@ dmrun() {
             if [[ ! -d ${directories[0]} ]]; then
                 printf "$LRED Directory provided: ${directories[0]} don't exists.$CESC\n"
             else
-                printf "Running docker command:\n"
+                #printf "Running docker command:\n"
                 if [[ -z $4 ]]; then
-                    printf "docker run -d -p $1 -v $2 $3\n"
+                    #printf "docker run -d -p $1 -v $2 $3\n"
                     docker run -d -p $1 -v $2 $3
                 else
-                    printf "docker run -d -p $1 -v $2 $3 --name $4\n"
+                    #printf "docker run -d -p $1 -v $2 $3 --name $4\n"
                     docker run -d -p $1 -v $2 $3 --name $4
                 fi
             fi
@@ -232,10 +232,10 @@ ditrun() {
         if [[ "$1" =~ $PORT_BIND_REGEX ]]; then
             printf "Running docker command:\n"
             if [[ -z "$3" ]]; then
-                printf "docker run -it $1 $2 bash\n"
+                #printf "docker run -it $1 $2 bash\n"
                 docker run -it -p $1 $2 bash
             else
-                printf "docker run -it $1 $2 --name $3 bash\n"
+                #printf "docker run -it $1 $2 --name $3 bash\n"
                 docker run -it -p $1 $2 --name $3 bash
             fi
         else
@@ -289,12 +289,12 @@ dmitrun() {
                 if [[ ! -d ${directories[0]} ]]; then
                     printf "$LRED Directory provided: ${directories[0]} don't exists.$CESC\n"
                 else
-                    printf "Running docker command:\n"
+                    #printf "Running docker command:\n"
                     if [[ -z "$4" ]]; then
-                        printf "docker run -it $1 $2 -v $3 bash\n"
+                        #printf "docker run -it $1 $2 -v $3 bash\n"
                         docker run -it $1 $2 -v $3 bash
                     else
-                        printf "docker run -it $1 $2 -v $4 --name $3 bash\n"
+                        #printf "docker run -it $1 $2 -v $4 --name $3 bash\n"
                         docker run -it $1 $2 -v $3 --name $4 bash
                     fi
                 fi
@@ -322,8 +322,8 @@ dexec() {
             printf "Usage example ---> dexec my_image"
             return
         else
-            printf "Running docker command:\n"
-            printf "docker exec -it $1 bash"
+            #printf "Running docker command:\n"
+            #printf "docker exec -it $1 bash"
             docker exec -it $1 bash
         fi
     fi
@@ -335,8 +335,8 @@ dexec() {
 #
 # for docker ps
 dps() {
-    printf "Running docker command:\n"
-    printf "docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Networks}}\t{{.Mounts}}\t{{.RunningFor}}\t{{.Status}}'"
+    #printf "Running docker command:\n"
+    #printf "docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Networks}}\t{{.Mounts}}\t{{.RunningFor}}\t{{.Status}}'"
     docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Networks}}\t{{.Mounts}}\t{{.RunningFor}}\t{{.Status}}'
 }
 
@@ -345,8 +345,8 @@ dps() {
 # for docker ps --filter name=<container_name|id> 
 dgrep() {
     if [[ $# -ge 1 ]]; then
-        printf "Running docker command:\n"
-        printf "docker ps --filter name=$1 --format 'table {{.ID}}\t{{.Names}}\t{{.Networks}}\t{{.Mounts}}\t{{.RunningFor}}\t{{.Status}}'"
+        #printf "Running docker command:\n"
+        #printf "docker ps --filter name=$1 --format 'table {{.ID}}\t{{.Names}}\t{{.Networks}}\t{{.Mounts}}\t{{.RunningFor}}\t{{.Status}}'"
         docker ps --filter name=$1 --format 'table {{.ID}}\t{{.Names}}\t{{.Networks}}\t{{.Mounts}}\t{{.RunningFor}}\t{{.Status}}'
     else
         printf "No arguments passed.\n"
