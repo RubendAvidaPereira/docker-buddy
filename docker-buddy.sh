@@ -3,6 +3,34 @@
 # Version: 1.0.2
 
 #----------------------------------------------------------------------------Help and Documentation
+#
+#                               [ Installation of docker buddy ]
+#
+#
+# ---> You can git clone from the repository on github using the following command:
+#     -> git clone https://github.com/RubendAvidaPereira/docker-buddy/
+# 
+# ---> Once you cloned it you should do the following commands
+#     -> cd docker-buddy                       ; Moves to the recently docker-buddy directory cloned from github
+#     -> mv docker-buddy.sh .docker-buddy      ; Changes docker-buddy file name and extension
+#
+# ---> On your base folder of linux, generally /home/<username>, edit the file named .bashrc,
+# at the end of the file add the following lines accordingly:
+#     -> if [ -f ~/docker-buddy/.docker-buddy ]; then
+#           source ~/docker-buddy/.docker-buddy
+#        fi
+# 
+# ---> You are ready to use Docker Buddy   
+#         _____    _____
+#        /  /  \__/  \  \
+#        \ /|  /\/\  |\ /
+#          _| |o o | |_
+#         / . .\__/. . \     WOOF
+#        /  . .(__). .  \
+#        \  .  /__\  .  /
+#         \___/\__/\___/
+#
+
 dhelp() {
     printf "\
     DOCKER BUDDY COMMANDS                                                                                                                          HELP
