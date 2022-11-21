@@ -1,68 +1,18 @@
 #!/usr/bin/env bash
+# Author: Ruben Pereira
+# Version: 1.0.2
 
 #----------------------------------------------------------------------------Help and Documentation
-dbuddy() {
-    printf "\
-    ############################################### [$LGREEN DOCKER BUDDY$CESC ] ####################################################
-    #                                                                                                                   #
-    #  $LYELLOW Author: Ruben Pereira$CESC                                                                                           #
-    #  $LYELLOW Version: 1.0.0$CESC                                                                                                  #
-    #                                                                                                                   #
-    #   ---> This is a bash script for docker useful comands that can be used in a daily basis,                         #
-    #   it has a lot docker commands that a lot of times are used repeatedly over and over again,                       #
-    #   sometimes with the same flags. For example, a common command:                                                   #
-    #                                                                                                                   #
-    #          $=====================================================================$                                  #
-    #          |                                                                     |                                  #
-    #          |   Docker normal command                                             |                                  #
-    #          |   --> docker run -d -p 443:443 my_container --name my_container     |                                  #
-    #          |                                                                     |                                  #
-    #          |   Equivalent Docker Buddy command:                                  |                                  #
-    #          |   --> drun 443:443 my_container my_container                        |                                  #
-    #          |                                                                     |                                  #
-    #          $=====================================================================$                                  #
-    #                                                                                                                   #
-    #   ---> Docker Buddy aims to be an alias for shorter docker commands and to spare a little                         #
-    #   time when building, running and inspecting docker processes.                                                    #
-    #                                                                                                                   #
-    #========================================== [$LGREEN COMMANDS & EXAMPLES$CESC ] ================================================#
-    #                                                                                                                   #
-    #   --->$LGREEN dbuild <container_name> <directory>$CESC                                                                        #
-    #        -> example:$LYELLOW dbuild my_container /mydir$CESC                                                                     #
-    #                                                                                                                   #
-    #   --->$LGREEN drun <ext_port:int_port> <container_name> <image_name>$CESC                                                     #
-    #        -> example:$LYELLOW drun 8000:80 my_container my_custom_name$CESC                                                       #
-    #                                                                                                                   #
-    #   --->$LGREEN dmrun <ext_port:int_port> <ext_directory:int_directory> <container_name> <image_name>$CESC                      #
-    #        -> example:$LYELLOW dmrun 443:443 /home/my_dir:/docker/docker_dir my_container my_image_name $CESC                      #                  
-    #                                                                                                                   #
-    #   --->$LGREEN ditrun <ext_port:int_port> <container_name> <image_name>$CESC                                                   #
-    #        -> example:$LYELLOW ditrun 8000:80$CESC                                                                                 #
-    #                                                                                                                   #
-    #   --->$LGREEN dexec <image_name>$CESC                                                                                         #
-    #        -> example:$LGREEN dexec my_image$CESC                                                                                 #
-    #                                                                                                                   #
-    #                                                                                                                   #
-    #                                                                                                                   #
-    #                                                                                                                   #
-    #                                                                                                                   #
-    #                                                                                                                   #
-    #                                                                                                                   #
-    #                                                                                                                   #
-    #                                                                                                                   #
-    #####################################################################################################################\n"
-}
-
 dhelp() {
     printf "\
-    DOCKER BUDDY COMMANDS
-    ------------------------------------------------------------------------------------------
+    DOCKER BUDDY COMMANDS                                                                                                                          HELP
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
     BUILD
     
     Buddy  --->$LGREEN dbuild <container_name> <directory>$CESC
     Normal --->$LYELLOW docker build -t <container_name> <directory> $CESC
 
-    ------------------------------------------------------------------------------------------
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
     RUN
     
     Buddy  --->$LGREEN drun <ext_port:int_port> <container_name> <image_name>$CESC
@@ -79,6 +29,15 @@ dhelp() {
     
     Buddy  --->$LGREEN dexec <image_name>$CESC
     Normal --->$LYELLOW docker exec -it <image_name> bash
+
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
+    INSPECT
+
+    Buddy  --->$LGREN dps$CESC
+    Normal --->$LYELLOW docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Networks}}\t{{.Mounts}}\t{{.RunningFor}}\t{{.Status}}'$CESC
+
+    Buddy  --->$LGREEN dgrep <container_name|id>$CESC
+    Normal --->$LYELLOW docker ps --filter name=$1 --format 'table {{.ID}}\t{{.Names}}\t{{.Networks}}\t{{.Mounts}}\t{{.RunningFor}}\t{{.Status}}'$CESC
     "
 }
 
@@ -111,14 +70,14 @@ dbuild() {
         if [[ -z "$2" ]]; then
             printf "Running docker command:\n"
             printf "docker build -t $1 .\n"
-            #docker build -t $1 .
+            docker build -t $1 .
             return
         fi
 
         if [[ -d "$2" ]]; then
             printf "Running docker command:\n"
             printf "docker build -t $1 $2\n"
-            #docker build -t $1 $2
+            docker build -t $1 $2
             return
         else
             printf "$LRED Directory provided doesn't exist.$CESC\n"
@@ -150,11 +109,11 @@ drun() {
                 printf "No image name passed in arguments, docker will create one random.\n"
                 printf "Running docker command:\n"
                 printf "docker run -d -p $1 $2\n"
-                #docker run -d -p $1 $2
+                docker run -d -p $1 $2
             else
                 printf "Running docker command:\n"
                 printf "docker run -d -p $1 $2 --name $3\n"
-                #docker run -d -p $1 $2 --name $3
+                docker run -d -p $1 $2 --name $3
             fi
         else
             printf "$LRED->Port bind pattern incorrect.$CESC\n"
@@ -213,10 +172,10 @@ dmrun() {
                 printf "Running docker command:\n"
                 if [[ -z $4 ]]; then
                     printf "docker run -d -p $1 -v $2 $3\n"
-                    #docker run -d -p $1 -v $2 $3
+                    docker run -d -p $1 -v $2 $3
                 else
                     printf "docker run -d -p $1 -v $2 $3 --name $4\n"
-                    #docker run -d -p $1 -v $2 $3 --name $4
+                    docker run -d -p $1 -v $2 $3 --name $4
                 fi
             fi
             return
@@ -246,10 +205,10 @@ ditrun() {
             printf "Running docker command:\n"
             if [[ -z "$3" ]]; then
                 printf "docker run -it $1 $2 bash\n"
-                #docker run -it $1 $2 bash
+                docker run -it -p $1 $2 bash
             else
                 printf "docker run -it $1 $2 --name $3 bash\n"
-                #docker run -it $1 $2 --name $3 bash
+                docker run -it -p $1 $2 --name $3 bash
             fi
         else
             printf "$LRED Port binding incorrect.$CESC\n"
@@ -304,11 +263,11 @@ dmitrun() {
                 else
                     printf "Running docker command:\n"
                     if [[ -z "$4" ]]; then
-                        printf "docker run -it $1 $2 bash\n"
-                        #docker run -it $1 $2 -v $3 bash
+                        printf "docker run -it $1 $2 -v $3 bash\n"
+                        docker run -it $1 $2 -v $3 bash
                     else
                         printf "docker run -it $1 $2 -v $4 --name $3 bash\n"
-                        #docker run -it $1 $2 -v $3 --name $4 bash
+                        docker run -it $1 $2 -v $3 --name $4 bash
                     fi
                 fi
             fi
@@ -324,28 +283,43 @@ dmitrun() {
 # Runs a bash shell inside of a docker image
 #
 # for docker exec -it <image_name> bash
-#dexec() {
-#
-#}
+dexec() {
+    if [[ $# == 0]]; then
+        printf "$LRED No arguments passed.$CESC"
+        printf "Usage example ---> dexec my_image"
+        return
+    else
+        if [[ ! $# -gt 1]]; then
+            printf "$LRED Too much arguments passed, only 1 required.$CESC"
+            printf "Usage example ---> dexec my_image"
+            return
+        else
+            printf "Running docker command:\n"
+            printf "docker exec -it $1 bash"
+            docker exec -it $1 bash
+        fi
+    fi
+    return
+}
 
 #------------------------------------------------------------ Inspect Docker Processes Commands
 # Shows current docker processes
 #
 # for docker ps
-#dps() {
-#    
-#}
+dps() {
+    printf "Running docker command:\n"
+    printf "docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Networks}}\t{{.Mounts}}\t{{.RunningFor}}\t{{.Status}}'"
+    docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Networks}}\t{{.Mounts}}\t{{.RunningFor}}\t{{.Status}}'
+}
 
 # Shows current docker processes that match the search pattern
 #
-# for docker ps | grep <pattern> with specific format
+# for docker ps --filter name=<container_name|id> 
 dgrep() {
     if [[ $# -ge 1 ]]; then
-        headers=$(docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Networks}}\t{{.Mounts}}\t{{.RunningFor}}\t{{.Status}}" | head --lines=1)
-        results=$(docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Networks}}\t{{.Mounts}}\t{{.RunningFor}}\t{{.Status}}" | grep $1)
-        
-        printf "$headers\n"
-        printf "$results\n"
+        printf "Running docker command:\n"
+        printf "docker ps --filter name=$1 --format 'table {{.ID}}\t{{.Names}}\t{{.Networks}}\t{{.Mounts}}\t{{.RunningFor}}\t{{.Status}}'"
+        docker ps --filter name=$1 --format 'table {{.ID}}\t{{.Names}}\t{{.Networks}}\t{{.Mounts}}\t{{.RunningFor}}\t{{.Status}}'
     else
         printf "No arguments passed.\n"
         printf "Usage example ---> dgrep my_image_name\n"
