@@ -312,7 +312,7 @@ dmitrun() {
 #
 # for docker exec -it <image_name> bash
 dexec() {
-    if [[ $# == 0]]; then
+    if [[ $# == 0 ]]; then
         printf "$LRED No arguments passed.$CESC"
         printf "Usage example ---> dexec my_image"
         return
