@@ -431,24 +431,21 @@ dlogs() {
                 printf "$LRED Incorrect usage, container name or id not passed.$CESC\n"
                 return
             else
-                printf "Running ---> docker logs --tail $number_lines $container_name\n"
-                return
+                docker logs --tail $number_lines $container_name
             fi
         elif [[ $number_lines -ge 1 ]] && [[ $details -eq 1 ]]; then
             if [[ -z $container_name ]]; then
                 printf "$LRED Incorrect usage, container name of id not passed.$CESC\n"
                 return
             else
-                printf "Running ---> docker logs --details --tail $number_lines $container_name\n"
-                return
+                docker logs --details --tail $number_lines $container_name
             fi
         elif [[ $details -eq 1 ]] && [[ $number_lines -eq 0 ]]; then
             if [[ -z $container_name ]]; then
                 printf "Incorrect usage, no container name provided.\n"
                 return
             else
-                printf "Running ---> docker logs --details $container_name\n"
-                return
+                docker logs --details $container_name
             fi
         else
             printf "$LRED Incorrect usage.$CESC\n"
@@ -458,8 +455,7 @@ dlogs() {
     # No flags passed
     elif [[ $# -eq 1 ]]; then
         printf "No flags passed.\n"
-        printf "Runnning docker logs $1\n"
-        return
+        docker logs $1
     else
         printf "Incorrect usage.\n"
         return 
@@ -484,7 +480,7 @@ dinsp() {
                     printf "Usage example ---> dinsp -c <container_name|id>\n"
                     return
                 else
-                    printf "Running ---> docker container inspect $2\n"
+                    docker container inspect $2
                     shift
                 fi ;;
             -i) # Check for -i flag
@@ -493,7 +489,7 @@ dinsp() {
                     printf "Usage example ---> dinsp -i <image_name|id>\n"
                     return
                 else
-                    printf "Running ---> docker image inspect $2\n"
+                    docker image inspect $2
                     shift
                 fi ;;
         esac
