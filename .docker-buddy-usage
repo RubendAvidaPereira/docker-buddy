@@ -1,0 +1,150 @@
+#!/usr/bin/env bash
+# Author: Ruben Pereira
+# Version: 1.0.3
+
+# This file is intended to provide help to the user of docker-buddy
+
+# ------------------------------------------------------- Variables
+LRED="\e[1;31m"     # FOR LIGHT RED COLOR IN TERMINAL
+LGREEN="\e[1;32m"   # FOR LIGHT BLUE COLOR IN TERMINAL
+LYELLOW="\e[1;33m"  # FOR LIGHT YELLOW COLOR IN TERMINAL
+CESC="\e[0m"        # TO ESCAPE PREVIOUS COLOR MODIFICATIONS
+
+# ----------------------------------------------------------- Usage
+usage_general(){
+    local USAGE1=$(usage_dmrun)
+    local USAGE2=$(usage_ditrun)
+    local USAGE3=$(usage_dmitrun)
+    local USAGE4=$(usage_dexec)
+    printf "\
+    $USAGE1
+    $USAGE2
+    $USAGE3
+    $USAGE4
+    \n"
+}
+
+#usage_dbuild(){}
+
+#usage_drun(){}
+
+usage_dmrun(){
+    printf "\
+    # [ COMMAND dmrun ] 
+    #                                                                                     
+    #   The dmrun command is an interpretation for docker run,
+    #   with the mount volume option, The image name is optional.
+    #                                                                                     
+    #   Example:                                                                        
+    #    $LGREEN dmrun 80:80 /home:/docker my_container my_container my_image_name$CESC                                                                          
+    #                                                                                
+    \n"
+}
+
+usage_ditrun(){
+    printf "\
+    # [ COMMAND ditrun ] 
+    #                                                                                     
+    #   The ditun command is an interpretation for docker run,
+    #   with the -it option, in order to get a bash shell after
+    #   running the docker image. The image name is optional.
+    #                                                                                     
+    #   Example:                                                                        
+    #    $LGREEN ditrun 80:80 my_container my_image_name$CESC                                                                          
+    #                                                                                
+    \n"
+}
+
+usage_dmitrun(){
+    printf "\
+    # [ COMMAND dmitrun ] 
+    #                                                                                     
+    #   The dmitun command is an interpretation for docker run,
+    #   with the -it option, in order to get a bash shell after
+    #   running the docker image. Uses the volume mount option too.
+    #   Image name is optional.
+    #                                                                                     
+    #   Example:                                                                        
+    #    $LGREEN dmitrun 80:80 /home:/docker my_container my_image_name$CESC                                                                          
+    #                                                                                
+    \n"
+}
+
+usage_dexec(){
+    printf "\
+    # [ COMMAND dexec ] 
+    #                                                                                     
+    #   The dps command is an interpretation for docker exec,
+    #   it needs an argument, the image name. Enters a bash shell
+    #   in that docker image immediately.
+    #                                                                                     
+    #   Example:                                                                        
+    #    $LGREEN dexec my_image$CESC                                                                          
+    #                                                                                
+    \n" 
+}
+
+usage_dps(){
+   printf "\
+    # [ COMMAND dps ] 
+    #                                                                                     
+    #   The dps command is an interpretation for docker ps,
+    #   it doesn't need any argument, and output a different
+    #   format of docker ps. 
+    #                                                                                     
+    #   Example:                                                                        
+    #    $LGREEN dps$CESC                                                                          
+    #                                                           
+    \n" 
+}
+
+usage_dgrep(){
+    printf "\
+    # [ COMMAND dgrep ] 
+    #                                                                                     
+    #   The dgrep command is an interpretation for docker ps, 
+    #   it must be passed an argument, that could be <container_name|id> 
+    #   in order to run the command properly. 
+    #                                                                                     
+    #   Example:                                                                        
+    #    $LGREEN dgrep 3fd00abc4$CESC                                                                          
+    #                                                                                
+    \n"
+}
+
+usage_dlogs(){
+    printf "\
+    # [ COMMAND dlogs ] 
+    #                                                                                     
+    #   -d -> Use -d for docker logs --details <container|image|id>                       
+    #   -t -> Use -t for docker -n <number_lines> <container|image|id>                    
+    #                                                                                     
+    #   The two flags can be used together:                                               
+    #   -dt -> Use -dt for docker logs --details -n <number_lines> <container|image|id>   
+    #   
+    #   Example:
+    #    $LGREEN dlogs -dt 10 my_container                                                                             
+    \n"
+}
+
+usage_dinsp(){
+    printf "\
+    # [ COMMAND dinsp ]
+    #                                                               
+    #   -c -> Use -c for docker container inspect <container_name>  
+    #   -i -> Use -i for docker image inspect <image_name>          
+    #   -n -> Use -n for docker network inspect <network_name>      
+    #                                                               
+    #   Only one flag supported, after the flag an                  
+    #   argument must be passed, it can be the container,           
+    #   image or network name.                                      
+    #
+    #   Example:
+    #    $LGREEN dinsp -c my_container
+    #    $LGREEN dinsp -i my_image 
+    \n"
+}
+
+#usage_dlist(){}
+
+#usage_dclean(){}
