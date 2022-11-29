@@ -1,44 +1,36 @@
 #!/usr/bin/env bash
 # Author: Ruben Pereira
-# Version: 1.0.5
+# Version: 1.0.6
 
 # This file is intended to provide help to the user of docker-buddy
 
 # ------------------------------------------------------- Variables
 LRED="\e[1;31m"     # FOR LIGHT RED COLOR IN TERMINAL
-LGREEN="\e[1;32m"   # FOR LIGHT BLUE COLOR IN TERMINAL
+LGREEN="\e[1;32m"   # FOR LIGHT GREEN COLOR IN TERMINAL
 LYELLOW="\e[1;33m"  # FOR LIGHT YELLOW COLOR IN TERMINAL
 CESC="\e[0m"        # TO ESCAPE PREVIOUS COLOR MODIFICATIONS
 
-# ----------------------------------------------------------- Usage
+# ---------------------------------------------------- Usage Docker
 usage_general(){
-    local USAGE1=$(usage_dbuild)
-    local USAGE2=$(usage_drun)
-    local USAGE3=$(usage_dmrun)
-    local USAGE4=$(usage_ditrun)
-    local USAGE5=$(usage_dmitrun)
-    local USAGE6=$(usage_dexec)
-    local USAGE7=$(usage_dps)
-    local USAGE8=$(usage_dgrep)
-    local USAGE9=$(usage_dinsp)
-    local USAGE10=$(usage_dlist)
-
     printf "\
-    $USAGE1
-    $USAGE2
-    $USAGE3
-    $USAGE4
-    $USAGE5
-    $USAGE6
-    $USAGE7
-    $USAGE8
-    $USAGE9
-    $USAGE10
+    # ${LGREEN}[ DOCKER USAGE ]$CESC
+    $(usage_dbuild)
+    $(usage_drun)
+    $(usage_dmrun)
+    $(usage_ditrun)
+    $(usage_dmitrun)
+    $(usage_dexec)
+    $(usage_dps)
+    $(usage_dgrep)
+    $(usage_dinsp)
+    $(usage_dlist)
+
+    # ${LBLUE}[ DOCKER-COMPOSE USAGE ]$CESC
     \n"
 }
 
 usage_dbuild(){
-    printf "\
+    printf "\n
     # [ COMMAND dbuild ] 
     #                                                                                     
     #   The dbuild command is an interpretation for docker build,
@@ -49,7 +41,7 @@ usage_dbuild(){
 }
 
 usage_drun(){
-   printf "\
+   printf "\n
     # [ COMMAND drun ] 
     #                                                                                     
     #   The drun command is an interpretation for docker run,
@@ -61,7 +53,7 @@ usage_drun(){
 }
 
 usage_dmrun(){
-    printf "\
+    printf "\n
     # [ COMMAND dmrun ] 
     #                                                                                     
     #   The dmrun command is an interpretation for docker run,
@@ -73,7 +65,7 @@ usage_dmrun(){
 }
 
 usage_ditrun(){
-    printf "\
+    printf "\n
     # [ COMMAND ditrun ] 
     #                                                                                     
     #   The ditun command is an interpretation for docker run,
@@ -86,7 +78,7 @@ usage_ditrun(){
 }
 
 usage_dmitrun(){
-    printf "\
+    printf "\n
     # [ COMMAND dmitrun ] 
     #                                                                                     
     #   The dmitun command is an interpretation for docker run,
@@ -100,7 +92,7 @@ usage_dmitrun(){
 }
 
 usage_dexec(){
-    printf "\
+    printf "\n
     # [ COMMAND dexec ] 
     #                                                                                     
     #   The dps command is an interpretation for docker exec,
@@ -113,7 +105,7 @@ usage_dexec(){
 }
 
 usage_dps(){
-   printf "\
+   printf "\n
     # [ COMMAND dps ] 
     #                                                                                     
     #   The dps command is an interpretation for docker ps,
@@ -126,7 +118,7 @@ usage_dps(){
 }
 
 usage_dgrep(){
-    printf "\
+    printf "\n
     # [ COMMAND dgrep ] 
     #                                                                                     
     #   The dgrep command is an interpretation for docker ps, 
@@ -139,7 +131,7 @@ usage_dgrep(){
 }
 
 usage_dlogs(){
-    printf "\
+    printf "\n
     # [ COMMAND dlogs ] 
     #                                                                                     
     #   -d -> Use -d for docker logs --details <container|image|id>                       
@@ -154,7 +146,7 @@ usage_dlogs(){
 }
 
 usage_dinsp(){
-    printf "\
+    printf "\n
     # [ COMMAND dinsp ]
     #                                                               
     #   -c -> Use -c for docker container inspect <container_name>  
@@ -172,7 +164,7 @@ usage_dinsp(){
 }
 
 usage_dlist(){
-    printf "\
+    printf "\n
     # [ COMMAND dlist ]
     #                                                               
     #   -c -> Use -c for docker container ls  

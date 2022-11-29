@@ -1,0 +1,327 @@
+#!/usr/bin/env bash
+# Author: Ruben Pereira
+# Version: 1.0.6
+
+# This file has minor alterations compared to the .docker-buddy file,
+# its purpose is to unit test all docker-buddy functions
+#   
+#         _____    _____
+#        /  /  \__/  \  \
+#        \ /|  /\/\  |\ /
+#          _| |o o | |_
+#         / . .\__/. . \     WOOF, let's test it
+#        /  . .(__). .  \
+#        \  .  /__\  .  /
+#         \___/\__/\___/
+#
+
+#------------------------------------------------------------------ General Tasks and Variables
+# RegEx for <ext_port:int_port>
+PORT_BIND_REGEX="^[0-9]{2,}:[0-9]{2,}$"
+
+# RegEx for <ext_directory:int_directory>
+DIR_BIND_REGEX="^([\/][a-zA-Z0-9_-]{1,}[^\/]):([\/][a-zA-Z0-9_-]{1,}[^\/])$"
+
+t_dbuild() {
+    if [[ $# == 0 ]]; then
+        echo "error"
+        return 0
+    fi
+
+    if [[ $# -ge 1 ]]; then
+        if [[ -z "$2" ]]; then
+           echo "passed"
+           return 0
+        fi
+
+        if [[ -d "$2" ]]; then
+            echo "passed"
+            return 0
+        else
+            echo "error"
+            return 1
+        fi
+    fi
+    return 0
+}
+ 
+t_drun() {
+    # Check if no arguments are passed
+    if [[ $# == 0 ]]; then
+        echo "error"
+        return 1
+    fi
+
+    # Command needs at least 2 arguments to run
+    if [[ $# -ge 2 ]]; then
+        if [[ "$1" =~ $PORT_BIND_REGEX ]]; then
+            if [ -z "$3" ]; then
+                echo "passed"
+                return 0
+            else
+                echo "passed"
+                return 0
+            fi
+        else
+            echo "error"
+            return 1
+        fi
+    else
+        echo "error"
+        return 1
+    fi
+    return 0
+}
+
+t_dmrun() {
+    # Checking if no arguments passed
+    if [[ $# == 0 ]]; then
+        echo "error"
+        return 1
+    fi
+
+    # Command needs at least 3 arguments to run
+    if [[ $# -ge 3 ]]; then
+        # Testing port bind pattern
+        if [[ ! "$1" =~ $PORT_BIND_REGEX ]]; then
+            echo "error"
+            return 1
+        # Testing directory mapping pattern
+        elif [[ ! "$2" =~ $DIR_BIND_REGEX ]]; then
+            echo "error"
+            return 1
+        else
+            # Split the 2nd argument to verify if directory exists
+            # Using IFS variable (Internal Field Separator) to separate 1st from 2nd directory in for loop
+            IFS=":"
+            DIR_BIND=($2)
+            
+            # Declaring directories array
+            declare -a directories
+            i=0
+            
+            for directory in "${DIR_BIND[@]}"
+            do
+                directories[i]=$directory
+                ((i++))
+            done
+
+            if [[ ! -d ${directories[0]} ]]; then
+                echo "error"
+                return 1
+            else
+                if [[ -z $4 ]]; then
+                    echo "passed"
+                else
+                    echo "passed"
+                fi
+            fi
+            return 0
+        fi
+    else
+        echo "error"
+        return 1
+    fi
+    return 0
+}
+
+t_ditrun() {
+    # Checking if no arguments passed
+    if [[ $# == 0 ]]; then
+        echo "error"
+        return 1
+    fi
+
+    if [[ $# -ge 2 ]]; then
+        if [[ "$1" =~ $PORT_BIND_REGEX ]]; then
+            if [[ -z "$3" ]]; then
+                echo "passed"
+            else
+                echo "passed"
+            fi
+        else
+            echo "error"
+            return 1
+        fi
+    else 
+        echo "error"
+        return 1
+    fi
+    return 0
+}
+
+t_dmitrun() {
+    # Checking if no arguments passed
+    if [[ $# == 0 ]]; then
+        echo "error"
+        return 1
+    fi
+
+    if [[ $# -ge 3 ]]; then
+        if [[ ! "$1" =~ $PORT_BIND_REGEX ]]; then
+            echo "error"
+            return 1
+        else
+            if [[ ! "$2" =~ $DIR_BIND_REGEX ]]; then
+                echo "error"
+                return 1
+            else
+                # Split the 2nd argument to verify if directory exists
+                # Using IFS variable (Internal Field Separator) to separate 1st from 2nd directory in for loop
+                IFS=":"
+                DIR_BIND=($2)
+                
+                # Declaring directories array
+                declare -a directories
+                i=0
+                
+                for directory in "${DIR_BIND[@]}"
+                do
+                    directories[i]=$directory
+                    ((i++))
+                done
+
+                if [[ ! -d ${directories[0]} ]]; then
+                    echo "error"
+                    return 1
+                else
+                    if [[ -z "$4" ]]; then
+                        echo "passed"
+                    else
+                        echo "passed"
+                    fi
+                fi
+            fi
+        fi
+    else 
+        echo "error"
+        return 1
+    fi
+    return 0
+}
+
+t_dexec() {
+    if [[ $# == 0 ]]; then
+        echo "error"
+        return 1
+    else
+        if [[ $# -gt 1 ]]; then
+            echo "error"
+            return 1
+        else
+            echo "passed"
+            return 0
+        fi
+    fi
+    return 0
+}
+
+t_dgrep() {
+    if [[ $# -ge 1 ]]; then
+        echo "passed"
+    else
+        echo "error"
+        return 1
+    fi
+    return 0
+}
+
+t_dlogs() {
+    local number_lines=0
+    local details=0
+    local container_name=""
+    local regex="^-([t|d]{0,2}|[td]{0,3})$"
+
+    if [[ ($# -ge 1) ]]; then
+        
+        container_name="${@: -1}"
+        
+        while getopts "dt:" flag
+        do
+            case $flag in
+                d) details=1 ;;
+                t) 
+                    if [[ -z "$OPTARG" ]]; then
+                        echo "error"
+                        return 1
+                    elif [[ "$OPTARG" =~ ^[0-9]{0,5}$ ]];then
+                        number_lines="$OPTARG"
+                    else
+                        echo "error"
+                        return 1
+                    fi
+                ;;
+            esac
+        done
+
+        if [[ -z $container_name ]] || [[ ${#container_name} -lt 2 ]] || [[ $container_name =~ $regex ]]; then
+            echo "error"
+            return 1
+        fi
+
+        if [[ $number_lines -eq 0 && $details -eq 0 ]]; then
+            echo "passed"
+            return 0
+        fi
+
+        if [[ $number_lines -eq 0 ]]; then
+            if [[ $details -eq 1 ]]; then
+                echo "passed"
+                return 0
+            else
+                echo "passed"
+                return 0
+            fi
+        else
+            if [[ $details -eq 1 ]]; then
+                echo "passed"
+                return 0
+            else
+                echo "passed"
+                return 0
+            fi
+        fi
+    else
+        echo "error"
+        return 0
+    fi
+}
+
+t_dinsp() {
+    if [[ $# -ge 1 ]]; then
+        while test $# != 0
+        do
+            case "$1" in
+                -c) # Check for -c flag
+                    if [[ -z $2 ]] || [[ $2 = '-i' || $2 = '-n' ]]; then
+                        echo "error"
+                        return 1
+                    else
+                        echo "passed"
+                        return 0
+                    fi ;;
+                -i) # Check for -i flag
+                    if [[ -z $2 ]] || [[ $2 = '-c' || $2 = '-n' ]]; then
+                        echo "error"
+                        return 1
+                    else
+                        echo "passed"
+                        return 0
+                    fi ;;
+                -n) # Check for -n flag
+                    if [[ -z $2 ]] || [[ $2 = '-c' || $2 = '-i' ]]; then
+                        echo "error"
+                        return 1
+                    else
+                        echo "passed"
+                        return 0
+                    fi ;;
+            esac
+            shift
+        done
+        return 0
+    else
+        echo "error"
+        return 1
+    fi 
+}

@@ -1,0 +1,362 @@
+#!/usr/bin/env bash
+# Author: Ruben Pereira
+# Version: 1.0.6
+
+# This file is intended to provide unit testing for the docker-buddy
+#
+#         _____    _____
+#        /  /  \__/  \  \
+#        \ /|  /\/\  |\ /
+#          _| |o o | |_
+#         / . .\__/. . \     WOOF, there are unit tests!
+#        /  . .(__). .  \
+#        \  .  /__\  .  /
+#         \___/\__/\___/
+#
+#-------------------------------------------------------- UNIT TESTS
+LRED="\e[1;31m"     # FOR LIGHT RED COLOR IN TERMINAL
+LGREEN="\e[1;32m"   # FOR LIGHT GREEN COLOR IN TERMINAL
+CESC="\e[0m"        # TO ESCAPE PREVIOUS COLOR MODIFICATIONS
+
+test_dbuddy(){
+    __test_dbuild
+    sleep 1
+    printf "\n"
+    __test_drun
+    sleep 1
+    printf "\n"
+    __test_dmrun
+    sleep 1
+    printf "\n"
+    __test_ditrun
+    sleep 1
+    printf "\n"
+    __test_dmitrun
+    sleep 1
+    printf "\n"
+    __test_dexec
+    sleep 1
+    printf "\n"
+    __test_dgrep
+    sleep 1
+    printf "\n"
+    __test_dlogs
+    sleep 1
+    printf "\n"
+    __test_dinsp
+    sleep 1
+    printf "\n"
+}
+
+#
+# Testing the dbuild command
+#
+__test_dbuild(){
+    local test_pass=($(t_dbuild my_container) $(t_dbuild my_container ./))
+    local test_exception=($(t_dbuild) $(t_dbuild my_container /somerandomdir))
+    
+    printf "[ Testing dbuild ]\n"
+
+    # Testing for correct usage
+    local j=0
+    for i in "${test_pass[@]}"
+    do
+        if [[ $i = "passed" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+
+    # Testing for wrong usage
+    for i in "${test_exception[@]}"
+    do
+        if [[ $i = "error" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+}
+
+#
+# Testing the drun command
+#
+__test_drun(){
+    local test_pass=($(t_drun 80:80 my_container) $(t_drun 80:80 my_container my_image))
+    local test_exception=($(t_drun) $(t_drun 80:80) $(t_drun 80::80 my_container))
+
+    printf "[ Testing drun ]\n"
+    # Testing for correct usage
+    local j=0
+    for i in "${test_pass[@]}"
+    do
+        if [[ $i = "passed" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+
+    # Testing for wrong usage
+    for i in "${test_exception[@]}"
+    do
+        if [[ $i = "error" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+}
+
+#
+# Testing dmrun command
+#
+__test_dmrun(){
+    local test_pass=($(t_dmrun 80:80 /home:/docker my_container) $(t_dmrun 80:80 /home:/docker my_container my_image))
+    local test_exception=($(t_dmrun) $(t_dmrun 80:80) $(t_dmrun 80::80 /home:/docker my_container) $(t_dmrun 80:80 /home/:/docker/ my_container) $(t_dmrun 80:80 /somerandomdir:/docker my_container))
+
+    printf "[ Testing dmrun ]\n"
+    # Testing for correct usage
+    local j=0
+    for i in "${test_pass[@]}"
+    do
+        if [[ $i = "passed" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+
+    # Testing for wrong usage
+    for i in "${test_exception[@]}"
+    do
+        if [[ $i = "error" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+}
+
+#
+# Testing ditrun command
+#
+__test_ditrun(){
+    local test_pass=($(t_ditrun 80:80 my_container) $(t_ditrun 80:80 my_container my_image))
+    local test_exception=($(t_ditrun) $(t_ditrun 80:80) $(t_ditrun 80::80 my_container))
+
+    printf "[ Testing ditrun ]\n"
+
+    # Testing for correct usage
+    local j=0
+    for i in "${test_pass[@]}"
+    do
+        if [[ $i = "passed" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+
+    # Testing for wrong usage
+    for i in "${test_exception[@]}"
+    do
+        if [[ $i = "error" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+}
+
+#
+# Testing dmitrun command
+#
+__test_dmitrun(){
+    local test_pass=($(t_dmitrun 80:80 /home:/docker my_container) $(t_dmitrun 80:80 /home:/docker my_container my_image))
+    local test_exception=($(t_dmitrun) $(t_dmitrun 80:80) $(t_dmitrun 80::80 /home:/docker my_container) $(t_dmitrun 80:80 /home/:/docker/ my_container) $(t_dmitrun 80:80 /somerandomdir:/docker my_container))
+
+    printf "[ Testing dmitrun ]\n"
+
+    # Testing for correct usage
+    local j=0
+    for i in "${test_pass[@]}"
+    do
+        if [[ $i = "passed" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+
+    # Testing for wrong usage
+    for i in "${test_exception[@]}"
+    do
+        if [[ $i = "error" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+}
+
+#
+# Testing dexec command
+#
+__test_dexec(){
+    local test_pass=($(t_dexec my_container))
+    local test_exception=($(t_dexec my_container my_container) $(t_dexec))
+
+    printf "[ Testing dexec ]\n"
+
+    # Testing for correct usage
+    local j=0
+    for i in "${test_pass[@]}"
+    do
+        if [[ $i = "passed" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+
+    # Testing for wrong usage
+    for i in "${test_exception[@]}"
+    do
+        if [[ $i = "error" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+}
+
+#
+# Testing dgrep command
+#
+__test_dgrep(){
+    local test_pass=($(t_dgrep my_container))
+    local test_exception=($(t_dgrep))
+
+    printf "[ Testing dgrep ]\n"
+
+    # Testing for correct usage
+    local j=0
+    for i in "${test_pass[@]}"
+    do
+        if [[ $i = "passed" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+
+    # Testing for wrong usage
+    for i in "${test_exception[@]}"
+    do
+        if [[ $i = "error" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+}
+
+#
+# Testing dinsp command
+#
+__test_dlogs(){
+    local test_pass=($(t_dlogs my_container) $(t_dlogs -t 10 my_container) $(t_dlogs -d -t 10 my_container) $(t_dlogs -d my_container))
+    local test_exception=($(t_dlogs -t name my_container) $(t_dlogs) $(t_dlogs -t))
+
+    printf "[ Testing dlogs ]\n"
+
+    # Testing for correct usage
+    local j=0
+    for i in "${test_pass[@]}"
+    do
+        if [[ $i = "passed" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+
+    # Testing for wrong usage
+    for i in "${test_exception[@]}"
+    do
+        if [[ $i = "error" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+}
+
+#
+# Testing dinsp command
+#
+__test_dinsp(){
+    local test_pass=($(t_dinsp -c my_test) $(t_dinsp -i my_test) $(t_dinsp -n my_test))
+    local test_exception=($(t_dinsp) $(t_dinsp -c) $(t_dinsp -i) $(t_dinsp -n))
+
+    printf "[ Testing dinsp ]\n"
+
+    # Testing for correct usage
+    local j=0
+    for i in "${test_pass[@]}"
+    do
+        if [[ $i = "passed" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+
+    # Testing for wrong usage
+    for i in "${test_exception[@]}"
+    do
+        if [[ $i = "error" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+}
