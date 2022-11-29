@@ -1,1 +1,4 @@
+# Git Ignore File
+
 .vscode/
+docker-buddy-todos.sh

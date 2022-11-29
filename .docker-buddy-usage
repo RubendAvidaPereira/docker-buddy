@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Author: Ruben Pereira
-# Version: 1.0.3
+# Version: 1.0.4
 
 # This file is intended to provide help to the user of docker-buddy
 
@@ -12,21 +12,51 @@ CESC="\e[0m"        # TO ESCAPE PREVIOUS COLOR MODIFICATIONS
 
 # ----------------------------------------------------------- Usage
 usage_general(){
-    local USAGE1=$(usage_dmrun)
-    local USAGE2=$(usage_ditrun)
-    local USAGE3=$(usage_dmitrun)
-    local USAGE4=$(usage_dexec)
+    local USAGE1=$(usage_dbuild)
+    local USAGE2=$(usage_drun)
+    local USAGE3=$(usage_dmrun)
+    local USAGE4=$(usage_ditrun)
+    local USAGE5=$(usage_dmitrun)
+    local USAGE6=$(usage_dexec)
+    local USAGE7=$(usage_dps)
+    local USAGE8=$(usage_dgrep)
+    local USAGE9=$(usage_dinsp)
+
     printf "\
     $USAGE1
     $USAGE2
     $USAGE3
     $USAGE4
+    $USAGE5
+    $USAGE6
+    $USAGE7
+    $USAGE8
+    $USAGE9
     \n"
 }
 
-#usage_dbuild(){}
+usage_dbuild(){
+    printf "\
+    # [ COMMAND dbuild ] 
+    #                                                                                     
+    #   The dbuild command is an interpretation for docker build,
+    #                                                                                     
+    #   Example:                                                                        
+    #    ${LGREEN}dbuild my_container my_image_name$CESC                              
+    \n"
+}
 
-#usage_drun(){}
+usage_drun(){
+   printf "\
+    # [ COMMAND drun ] 
+    #                                                                                     
+    #   The drun command is an interpretation for docker run,
+    #   without the mount volume option, The image name is optional.
+    #                                                                                     
+    #   Example:                                                                        
+    #    ${LGREEN}dmrun 80:80 my_container my_image_name$CESC                    
+    \n" 
+}
 
 usage_dmrun(){
     printf "\
@@ -36,8 +66,7 @@ usage_dmrun(){
     #   with the mount volume option, The image name is optional.
     #                                                                                     
     #   Example:                                                                        
-    #    $LGREEN dmrun 80:80 /home:/docker my_container my_container my_image_name$CESC                                                                          
-    #                                                                                
+    #    ${LGREEN}dmrun 80:80 /home:/docker my_container my_container my_image_name$CESC                                                
     \n"
 }
 
@@ -50,8 +79,7 @@ usage_ditrun(){
     #   running the docker image. The image name is optional.
     #                                                                                     
     #   Example:                                                                        
-    #    $LGREEN ditrun 80:80 my_container my_image_name$CESC                                                                          
-    #                                                                                
+    #    ${LGREEN}ditrun 80:80 my_container my_image_name$CESC                                   
     \n"
 }
 
@@ -65,8 +93,7 @@ usage_dmitrun(){
     #   Image name is optional.
     #                                                                                     
     #   Example:                                                                        
-    #    $LGREEN dmitrun 80:80 /home:/docker my_container my_image_name$CESC                                                                          
-    #                                                                                
+    #    ${LGREEN}dmitrun 80:80 /home:/docker my_container my_image_name$CESC                                                 
     \n"
 }
 
@@ -79,8 +106,7 @@ usage_dexec(){
     #   in that docker image immediately.
     #                                                                                     
     #   Example:                                                                        
-    #    $LGREEN dexec my_image$CESC                                                                          
-    #                                                                                
+    #    ${LGREEN}dexec my_image$CESC                                                                   
     \n" 
 }
 
@@ -93,8 +119,7 @@ usage_dps(){
     #   format of docker ps. 
     #                                                                                     
     #   Example:                                                                        
-    #    $LGREEN dps$CESC                                                                          
-    #                                                           
+    #    ${LGREEN}dps$CESC                                                        
     \n" 
 }
 
@@ -107,8 +132,7 @@ usage_dgrep(){
     #   in order to run the command properly. 
     #                                                                                     
     #   Example:                                                                        
-    #    $LGREEN dgrep 3fd00abc4$CESC                                                                          
-    #                                                                                
+    #    ${LGREEN}dgrep 3fd00abc4$CESC                                                                           
     \n"
 }
 
@@ -123,7 +147,7 @@ usage_dlogs(){
     #   -dt -> Use -dt for docker logs --details -n <number_lines> <container|image|id>   
     #   
     #   Example:
-    #    $LGREEN dlogs -dt 10 my_container                                                                             
+    #    ${LGREEN}dlogs -dt 10 my_container$CESC                                                                            
     \n"
 }
 
@@ -140,8 +164,8 @@ usage_dinsp(){
     #   image or network name.                                      
     #
     #   Example:
-    #    $LGREEN dinsp -c my_container
-    #    $LGREEN dinsp -i my_image 
+    #    ${LGREEN}dinsp -c my_container$CESC
+    #    ${LGREEN}dinsp -i my_image$CESC 
     \n"
 }
 
