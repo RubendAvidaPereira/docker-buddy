@@ -21,6 +21,7 @@ usage_general(){
     local USAGE7=$(usage_dps)
     local USAGE8=$(usage_dgrep)
     local USAGE9=$(usage_dinsp)
+    local USAGE10=$(usage_dlist)
 
     printf "\
     $USAGE1
@@ -32,6 +33,7 @@ usage_general(){
     $USAGE7
     $USAGE8
     $USAGE9
+    $USAGE10
     \n"
 }
 
@@ -169,6 +171,22 @@ usage_dinsp(){
     \n"
 }
 
-#usage_dlist(){}
+usage_dlist(){
+    printf "\
+    # [ COMMAND dlist ]
+    #                                                               
+    #   -c -> Use -c for docker container ls  
+    #   -i -> Use -i for docker image ls         
+    #   -s -> Use -n for docker service ls      
+    #                                                               
+    #   The three flags can be combined for a combined output                  
+    #   with docker ls.                                      
+    #
+    #   Example:
+    #    ${LGREEN}dlist -c$CESC
+    #    ${LGREEN}dlist -i$CESC
+    #    ${LGREEN}dlist -ci$CESC 
+    \n"
+}
 
 #usage_dclean(){}
