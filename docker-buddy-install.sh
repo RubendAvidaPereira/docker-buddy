@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Author: Ruben Pereira
-# Version: 1.0.4
+# Version: 1.0.5
 
 # This file is a simple script for the docker-buddy installation
 
@@ -19,4 +19,5 @@ if [ -f ~/docker-buddy/.docker-buddy-usage ]; then
 fi
 EOT
 
+# 3. Execute bash for docker buddy ready to use
 exec bash
