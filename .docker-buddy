@@ -373,11 +373,11 @@ dlogs() {
             return 0
         fi
 
-        echo "error"
+        usage_dlogs
         return 1
 
     else
-        echo "error"
+        usage_dlogs
         return 1
     fi
 }
