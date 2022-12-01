@@ -1,8 +1,18 @@
 #!/usr/bin/env bash
 # Author: Ruben Pereira
-# Version: 1.0.6
+# Version: 1.0.7
 
 # This file is intended to provide help to the user of docker-buddy
+#   
+#         _____    _____
+#        /  /  \__/  \  \
+#        \ /|  /\/\  |\ /
+#          _| |o o | |_
+#         / . .\__/. . \     WOOF, I have help on usage
+#        /  . .(__). .  \
+#        \  .  /__\  .  /
+#         \___/\__/\___/
+#
 
 # ------------------------------------------------------- Variables
 LRED="\e[1;31m"     # FOR LIGHT RED COLOR IN TERMINAL
@@ -10,7 +20,6 @@ LGREEN="\e[1;32m"   # FOR LIGHT GREEN COLOR IN TERMINAL
 LYELLOW="\e[1;33m"  # FOR LIGHT YELLOW COLOR IN TERMINAL
 CESC="\e[0m"        # TO ESCAPE PREVIOUS COLOR MODIFICATIONS
 
-# ---------------------------------------------------- Usage Docker
 usage_general(){
     printf "\
     # ${LGREEN}[ DOCKER USAGE ]$CESC
@@ -26,9 +35,11 @@ usage_general(){
     $(usage_dlist)
 
     # ${LBLUE}[ DOCKER-COMPOSE USAGE ]$CESC
+    $(usage_dcbuild)
     \n"
 }
 
+# ---------------------------------------------------- Usage Docker
 usage_dbuild(){
     printf "\n
     # [ COMMAND dbuild ] 
@@ -182,3 +193,21 @@ usage_dlist(){
 }
 
 #usage_dclean(){}
+
+# -------------------------------------------- Usage Docker Compose
+usage_dcbuild(){
+        printf "\n
+    # [ COMMAND dcbuild ]
+    #                                                               
+    #   -n -> Use -n for docker compose build --no-cache  
+    #   -s -> Use -s for docker compose build          
+    #                                                               
+    #   The two flags can be combined for a build context                  
+    #   with no cache and a specific service.            
+    #
+    #   Example:
+    #    ${LGREEN}dcbuild$CESC
+    #    ${LGREEN}dcbuild -n$CESC
+    #    ${LGREEN}dcbuild -s my_service$CESC
+    \n"
+}

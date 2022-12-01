@@ -1,8 +1,18 @@
 #!/usr/bin/env bash
 # Author: Ruben Pereira
-# Version: 1.0.6
+# Version: 1.0.7
 
 # This file is a simple script for the docker-buddy installation
+#   
+#         _____    _____
+#        /  /  \__/  \  \
+#        \ /|  /\/\  |\ /
+#          _| |o o | |_
+#         / . .\__/. . \     WOOF, let's install it
+#        /  . .(__). .  \
+#        \  .  /__\  .  /
+#         \___/\__/\___/
+#
 
 # 1. Set the file to write to
 user=$(whoami)

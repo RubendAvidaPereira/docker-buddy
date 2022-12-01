@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Author: Ruben Pereira
-# Version: 1.0.6
+# Version: 1.0.7
 
 # This file is intended to provide unit testing for the docker-buddy
 #
@@ -13,12 +13,15 @@
 #        \  .  /__\  .  /
 #         \___/\__/\___/
 #
+
 #-------------------------------------------------------- UNIT TESTS
 LRED="\e[1;31m"     # FOR LIGHT RED COLOR IN TERMINAL
 LGREEN="\e[1;32m"   # FOR LIGHT GREEN COLOR IN TERMINAL
 CESC="\e[0m"        # TO ESCAPE PREVIOUS COLOR MODIFICATIONS
 
 test_dbuddy(){
+    printf "[ Testing Docker Buddy - Docker implementation ]\n"
+
     __test_dbuild
     sleep 1
     printf "\n"
@@ -46,8 +49,15 @@ test_dbuddy(){
     __test_dinsp
     sleep 1
     printf "\n"
+
+    printf "[ Testing Docker Buddy - Docker Compose implementation ]\n"
+
+    __test_dcbuild
+    sleep 1
+    printf "\n"
 }
 
+#--------------------------------------------------------- DOCKER
 #
 # Testing the dbuild command
 #
@@ -296,7 +306,7 @@ __test_dgrep(){
 #
 __test_dlogs(){
     local test_pass=($(t_dlogs my_container) $(t_dlogs -t 10 my_container) $(t_dlogs -d -t 10 my_container) $(t_dlogs -d my_container))
-    local test_exception=($(t_dlogs -t name my_container) $(t_dlogs) $(t_dlogs -t))
+    local test_exception=($(t_dlogs) $(t_dlogs -t))
 
     printf "[ Testing dlogs ]\n"
 
@@ -334,6 +344,42 @@ __test_dinsp(){
     local test_exception=($(t_dinsp) $(t_dinsp -c) $(t_dinsp -i) $(t_dinsp -n))
 
     printf "[ Testing dinsp ]\n"
+
+    # Testing for correct usage
+    local j=0
+    for i in "${test_pass[@]}"
+    do
+        if [[ $i = "passed" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+
+    # Testing for wrong usage
+    for i in "${test_exception[@]}"
+    do
+        if [[ $i = "error" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+}
+
+#-------------------------------------------------- DOCKER COMPOSE
+#
+# Testing dcbuild command
+#
+__test_dcbuild(){
+    local test_pass=($(t_dcbuild) $(t_dcbuild -s my_service) $(t_dcbuild -n) $(t_dcbuild -ns my_service))
+    local test_exception=($(t_dcbuild -s) $(t_dcbuild -ns))
+
+    printf "[ Testing dcbuild ]\n"
 
     # Testing for correct usage
     local j=0
