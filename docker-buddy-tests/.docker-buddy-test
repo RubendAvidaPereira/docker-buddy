@@ -235,7 +235,7 @@ t_dlogs() {
     local is_number="^[0-9]{0,5}$"
 
     if [[ ($# -ge 1) ]]; then
-        if [[ "$1" = "-d" && "$1" = "-t" ]]; then
+        if [[ ! "$1" = "-d" && ! "$1" = "-t" ]]; then
             echo "passed"
             return 0
         fi

@@ -83,7 +83,7 @@ DIR_BIND_REGEX="^([\/][a-zA-Z0-9_-]{1,}[^\/]):([\/][a-zA-Z0-9_-]{1,}[^\/])$"
 # *if <directory> not passed runs on current directory
 dbuild() {
     if [[ $# == 0 ]]; then
-        printf "${LRED}No arguments passed.$CESC\n"
+        printf "${LRED}Error - No arguments passed.$CESC\n"
         usage_dbuild
         return 1
     fi
@@ -96,7 +96,7 @@ dbuild() {
         if [[ -d "$2" ]]; then
             docker build -t $1 $2
         else
-            printf "${LRED}Directory provided doesn't exist.$CESC\n"
+            printf "${LRED}Error - Directory provided doesn't exist.$CESC\n"
             return 1
         fi
     fi
@@ -111,7 +111,7 @@ dbuild() {
 drun() {
     # Check if no arguments are passed
     if [[ $# == 0 ]]; then
-        printf "${LRED}No arguments passed.$CESC\n"
+        printf "${LRED}Error - No arguments passed.$CESC\n"
         usage_drun
         return 1
     fi
@@ -125,11 +125,11 @@ drun() {
                 docker run -d -p $1 --name $3 $2
             fi
         else
-            printf "${LRED}Port bind pattern incorrect.$CESC\n"
+            printf "${LRED}Error - Port bind pattern incorrect.$CESC\n"
             return 1
         fi
     else
-        printf "${LRED}Too few arguments.$CESC\n"
+        printf "${LRED}Error - Too few arguments.$CESC\n"
         usage_drun
         return 1
     fi
@@ -143,7 +143,7 @@ drun() {
 dmrun() {
     # Checking if no arguments passed
     if [[ $# == 0 ]]; then
-        printf "${LRED}No arguments passed.$CESC\n"
+        printf "${LRED}Error - No arguments passed.$CESC\n"
         usage_dmrun
         return 1
     fi
@@ -152,11 +152,11 @@ dmrun() {
     if [[ $# -ge 3 ]]; then
         # Testing port bind pattern
         if [[ ! "$1" =~ $PORT_BIND_REGEX ]]; then
-            printf "${LRED}Port bind pattern incorrect.$CESC\n"
+            printf "${LRED}Error - Port bind pattern incorrect.$CESC\n"
             return 1
         # Testing directory mapping pattern
         elif [[ ! "$2" =~ $DIR_BIND_REGEX ]]; then
-            printf "${LRED}Directory bind pattern incorrect\n"
+            printf "${LRED}Error - Directory bind pattern incorrect\n"
             return 1
         else
             # Split the 2nd argument to verify if directory exists
@@ -175,7 +175,7 @@ dmrun() {
             done
 
             if [[ ! -d ${directories[0]} ]]; then
-                printf "$LRED Directory provided: ${directories[0]} don't exists.$CESC\n"
+                printf "${LRED}Error - Directory provided: ${directories[0]} don't exists.$CESC\n"
                 return 1
             else
                 if [[ -z $4 ]]; then
@@ -187,7 +187,7 @@ dmrun() {
             return 0
         fi
     else
-        printf "${LRED}Too few arguments.$CESC\n"
+        printf "${LRED}Error - Too few arguments.$CESC\n"
         usage_dmrun
         return 1
     fi
@@ -201,7 +201,7 @@ dmrun() {
 ditrun() {
     # Checking if no arguments passed
     if [[ $# == 0 ]]; then
-        printf "${LRED}No arguments passed.$CESC\n"
+        printf "${LRED}Error - No arguments passed.$CESC\n"
         usage_ditrun
         return 1
     fi
@@ -214,11 +214,11 @@ ditrun() {
                 docker run -it -p $1 --name $3 $2 bash
             fi
         else
-            printf "${LRED}Port binding incorrect.$CESC\n"
+            printf "${LRED}Error - Port binding incorrect.$CESC\n"
             return 1
         fi
     else 
-        printf "${LRED}Too few arguments.$CESC\n"
+        printf "${LRED}Error - Too few arguments.$CESC\n"
         usage_ditrun
         return 1
     fi
@@ -232,18 +232,18 @@ ditrun() {
 dmitrun() {
     # Checking if no arguments passed
     if [[ $# == 0 ]]; then
-        printf "${LRED}No arguments passed.$CESC\n"
+        printf "${LRED}Error - No arguments passed.$CESC\n"
         usage_dmitrun
         return 1
     fi
 
     if [[ $# -ge 3 ]]; then
         if [[ ! "$1" =~ $PORT_BIND_REGEX ]]; then
-            printf $"${LRED}Port binding incorrect.$CESC\n"
+            printf $"${LRED}Error - Port binding incorrect.$CESC\n"
             return 1
         else
             if [[ ! "$2" =~ $DIR_BIND_REGEX ]]; then
-                printf "${LRED}Directory binding incorrect.$CESC\n"
+                printf "${LRED}Error - Directory binding incorrect.$CESC\n"
                 return 1
             else
                 # Split the 2nd argument to verify if directory exists
@@ -262,7 +262,7 @@ dmitrun() {
                 done
 
                 if [[ ! -d ${directories[0]} ]]; then
-                    printf "${LRED}Directory provided: ${directories[0]} don't exists.$CESC\n"
+                    printf "${LRED}Error - Directory provided: ${directories[0]} don't exists.$CESC\n"
                     return 1
                 else
                     if [[ -z "$4" ]]; then
@@ -274,7 +274,7 @@ dmitrun() {
             fi
         fi
     else 
-        printf "${LRED}Too few arguments.$CESC\n"
+        printf "${LRED}Error - Too few arguments.$CESC\n"
         usage_dmitrun
         return 1
     fi
@@ -286,12 +286,12 @@ dmitrun() {
 # for docker exec -it <image_name> bash
 dexec() {
     if [[ $# == 0 ]]; then
-        printf "${LRED}No arguments passed.$CESC\n"
+        printf "${LRED}Error - no arguments passed.$CESC\n"
         usage_dexec
         return 1
     else
         if [[ $# -gt 1 ]]; then
-            printf "${LRED}Too much arguments passed, only 1 required.$CESC\n"
+            printf "${LRED}Error - too much arguments passed, only 1 required.$CESC\n"
             usage_dexec
             return 1
         else
@@ -316,7 +316,7 @@ dgrep() {
     if [[ $# -ge 1 ]]; then
         docker ps --filter name=$1 --format 'table {{.ID}}\t{{.Names}}\t{{.Networks}}\t{{.Mounts}}\t{{.RunningFor}}\t{{.Status}}'
     else
-        printf "${LRED}No arguments passed.$CESC\n"
+        printf "${LRED}Error - No arguments passed.$CESC\n"
         usage_dgrep
         return 1
     fi
@@ -345,12 +345,12 @@ dlogs() {
                 -d|--details)
                     if [[ "$2" = "-t" ]]; then
                         if [[ ! $3 =~ $is_number ]]; then
-                            echo "${LRED} Error - expected a number.\n$CESC"
+                            printf "${LRED}Error - expected a number.$CESC\n"
                             usage_dlogs
                             return 1
                         else
                             if [[ -z "$4" ]]; then
-                                echo "${LRED} Error - container name needed.\n$CESC"
+                                printf "${LRED}Error - container name needed.$CESC\n"
                                 usage_dlogs
                                 return 1
                             else
@@ -365,7 +365,7 @@ dlogs() {
                         return 0
                     fi
 
-                    echo "error"
+                    printf "${LRED}Couldn't complete the requested command.$CESC\n"
                     return 1
                 ;;
                 -t|--tail) 
@@ -377,12 +377,12 @@ dlogs() {
                             docker logs -n $2 $3
                             return 0
                         else
-                            echo "${LRED} Error - container name needed.\n$CESC"
+                            printf "${LRED} Error - container name needed.$CESC\n"
                             return 1
                         fi
                     fi
 
-                    echo "${LRED} Error - expected a number.\n$CESC"
+                    printf "${LRED} Error - expected a number.\n$CESC"
                     usage_dlogs
                     return 1
                  ;;
@@ -410,7 +410,7 @@ dinsp() {
             case "$1" in
                 -c) # Check for -c flag
                     if [[ -z $2 ]] || [[ $2 = '-i' || $2 = '-n' ]]; then
-                        printf "${LRED}Container name not found.$CESC\n"
+                        printf "${LRED}Error - Container name not found.$CESC\n"
                         usage_dinsp
                         return 1
                     else
@@ -419,7 +419,7 @@ dinsp() {
                     fi ;;
                 -i) # Check for -i flag
                     if [[ -z $2 ]] || [[ $2 = '-c' || $2 = '-n' ]]; then
-                        printf "${LRED}Image name not found.$CESC\n"
+                        printf "${LRED}Error - Image name not found.$CESC\n"
                         usage_dinsp
                         return 1
                     else
@@ -428,7 +428,7 @@ dinsp() {
                     fi ;;
                 -n) # Check for -n flag
                     if [[ -z $2 ]] || [[ $2 = '-c' || $2 = '-i' ]]; then
-                        printf "${LRED}Network name not found.$CESC\n"
+                        printf "${LRED}Error - Network name not found.$CESC\n"
                         usage_dinsp
                         return 1
                     else
@@ -440,7 +440,7 @@ dinsp() {
         done
         return 0
     else
-        printf "${LRED}No arguments passed.$CESC\n"
+        printf "${LRED}Error - No arguments passed.$CESC\n"
         usage_dinsp
         return 1
     fi 
