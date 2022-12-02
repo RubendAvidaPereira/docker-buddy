@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Author: Ruben Pereira
-# Version: 1.0.7
+# Version: 1.0.8
 
 # This file has minor alterations compared to the .docker-buddy file,
 # its purpose is to unit test all docker-buddy functions

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Author: Ruben Pereira
-# Version: 1.0.7
+# Version: 1.0.8
 
 # This file is intended to provide help to the user of docker-buddy
 #   
@@ -188,7 +188,7 @@ usage_dlist(){
     #   Example:
     #    ${LGREEN}dlist -c$CESC
     #    ${LGREEN}dlist -i$CESC
-    #    ${LGREEN}dlist -ci$CESC 
+    #    ${LGREEN}dlist -c -i -s$CESC 
     \n"
 }
 
