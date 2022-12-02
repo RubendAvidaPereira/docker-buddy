@@ -232,12 +232,10 @@ t_dgrep() {
 }
 
 t_dlogs() {
-    local container_name=""
     local is_number="^[0-9]{0,5}$"
-    local is_container="^([a-zA-Z0-9\-\_]){4,}$"
 
     if [[ ($# -ge 1) ]]; then
-        if [[ $1 =~ $is_container ]]; then
+        if [[ $1 = "-d" && $1 = "-t" ]]; then
             echo "passed"
             return 0
         fi
@@ -245,17 +243,13 @@ t_dlogs() {
         while test $# != 0
         do
             case $1 in
-                -dt) 
-                    echo "error"
-                    return 1
-                ;;
                 -d|--details)
-                    if [[ $2 =~ $is_container ]]; then
+                    if [[ ! -z $2 ]]; then
                         echo "passed"
                         return 0
                     fi
 
-                    if [[ $2 = "-t" || $2 = "--tail" ]]; then
+                    if [[ $2 = "-t" ]]; then
                         if [[ ! $3 =~ $is_number ]]; then
                             echo "error"
                             return 1
@@ -275,10 +269,10 @@ t_dlogs() {
                 ;;
                 -t|--tail) 
                     if [[ $2 =~ $is_number ]]; then
-                        if [[ ($3 = "-d" || $3 = "--details") && $4 =~ $is_container ]]; then
+                        if [[ $3 = "-d" && ! -z $4 ]]; then
                             echo "passed"
                             return 0
-                        elif [[ $3 =~ $is_container ]]; then
+                        elif [[ ! -z $3 ]]; then
                             echo "passed"
                             return 0
                         else
@@ -286,6 +280,7 @@ t_dlogs() {
                             return 1
                         fi
                     fi
+                    
                     echo "error"
                     return 1
                  ;;
