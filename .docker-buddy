@@ -343,11 +343,6 @@ dlogs() {
         do
             case $1 in
                 -d|--details)
-                    if [[ ! -z $2 ]]; then
-                        docker logs --details $2
-                        return 0
-                    fi
-
                     if [[ $2 = "-t" ]]; then
                         if [[ ! $3 =~ $is_number ]]; then
                             echo "${LRED} Error - expected a number.\n$CESC"
@@ -364,6 +359,11 @@ dlogs() {
                             fi
                         fi
                     fi 
+
+                    if [[ ! -z $2 ]]; then
+                        docker logs --details $2
+                        return 0
+                    fi
 
                     echo "error"
                     return 1
