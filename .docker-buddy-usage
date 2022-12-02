@@ -152,7 +152,7 @@ usage_dlogs(){
     #   -dt -> Use -dt for docker logs --details -n <number_lines> <container|image|id>   
     #   
     #   Example:
-    #    ${LGREEN}dlogs -dt 10 my_container$CESC                                                                            
+    #    ${LGREEN}dlogs -d -t 10 my_container$CESC                                                                            
     \n"
 }
 

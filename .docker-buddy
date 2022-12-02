@@ -331,51 +331,64 @@ dgrep() {
 #
 # for docker logs <container_name|id>
 dlogs() {
-    local number_lines=0
-    local details=0
     local container_name=""
-    local regex="^-([t|d]{0,2}|[td]{0,3})$"
     local is_number="^[0-9]{0,5}$"
     local is_container="^([a-zA-Z0-9\-\_]){4,}$"
 
     if [[ ($# -ge 1) ]]; then
-        
-        container_name="${@: -1}"
-        
-        while getopts "dt:" flag
+        if [[ $1 =~ $is_container ]]; then
+            docker logs $1
+            return 0
+        fi
+
+        while test $# != 0
         do
-            case $flag in
-                d) details=1 ;;
-                t) number_lines="$OPTARG" ;;                   
-                \?) echo "error"
-                    return 1 
+            case $1 in
+                -d|--details)
+                    if [[ $2 =~ $is_container ]]; then
+                        docker logs --details $2
+                        return 0
+                    fi
+
+                    if [[ $2 = "-t" || $2 = "--tail" ]]; then
+                        if [[ ! $3 =~ $is_number ]]; then
+                            echo "${LRED}Error - expected a number.\n$CESC"
+                            usage_dlogs
+                            return 1
+                        else
+                            if [[ -z $4 ]]; then
+                                echo "${LRED}Error - container name needed.\n$CESC"
+                                usage_dlogs
+                                return 1
+                            else
+                                docker logs --details -n $3 $4
+                                return 0
+                            fi
+                        fi
+                    fi 
+
+                    echo "error"
+                    return 1
                 ;;
+                -t|--tail) 
+                    if [[ $2 =~ $is_number ]]; then
+                        if [[ ($3 = "-d" || $3 = "--details") && $4 =~ $is_container ]]; then
+                            docker logs --details -n $2 $4
+                            return 0
+                        elif [[ $3 =~ $is_container ]]; then
+                            docker logs -n $2 $3
+                            return 0
+                        else
+                            echo "${LRED}Error - container name needed.\n$CESC"
+                            return 1
+                        fi
+                    fi
+                    echo "${LRED}Error - number needed after flag -t.\n$CESC"
+                    usage_dlogs
+                    return 1
+                 ;;
             esac
         done
-        
-        if [[ $details -eq 0 && $number_lines =~ $is_number && $container_name =~ $is_container ]]; then
-            docker logs -n $number_lines $container_name
-            return 0
-        fi
-
-        if [[ $details -eq 0 && $number_lines -eq 0 && $container_name =~ $is_container ]]; then
-            docker logs $container_name
-            return 0
-        fi
-
-        if [[ $details -eq 1 && $number_lines =~ $is_number && $number_lines -gt 0 && $container_name =~ $is_container ]]; then
-            docker logs --details -n $number_lines $container_name
-            return 0
-        fi
-
-        if [[ $details -eq 1 && $number_lines -eq 0 && $container_name =~ $is_container ]]; then
-            docker logs --detaisl $container_name
-            return 0
-        fi
-
-        usage_dlogs
-        return 1
-
     else
         usage_dlogs
         return 1
