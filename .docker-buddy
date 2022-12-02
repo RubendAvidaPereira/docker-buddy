@@ -50,12 +50,8 @@ dbuddy() {
     while test $# != 0
     do
         case "$1" in
-        -v) 
-            printf "${LGREEN}Version $VERSION"
-            shift ;;
-        -h)
-            usage_general
-            shift ;;
+        -v) printf "${LGREEN}Version $VERSION $CESC\n" ;;
+        -h) usage_general ;;
         esac
     done
     return 0
