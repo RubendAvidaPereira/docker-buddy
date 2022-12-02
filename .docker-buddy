@@ -334,7 +334,7 @@ dlogs() {
     local is_number="^[0-9]{0,5}$"
 
     if [[ ($# -ge 1) ]]; then
-        if [[ $1 = "-d" && $1 = "-t" ]]; then
+        if [[ ! $1 = "-d" && ! $1 = "-t" ]]; then
             docker logs $1
             return 0
         fi
