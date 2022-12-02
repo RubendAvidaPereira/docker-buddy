@@ -498,9 +498,9 @@ dlist() {
         printf "$services\n"
     fi
 
-    unset $container
-    unset $images
-    unset $services
+    unset container
+    unset images
+    unset services
     return 0
 }
 
