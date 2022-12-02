@@ -373,12 +373,12 @@ dlogs() {
                             docker logs -n $2 $3
                             return 0
                         else
-                            printf "${LRED} Error - container name needed.$CESC\n"
+                            printf "${LRED}Error - container name needed.$CESC\n"
                             return 1
                         fi
                     fi
 
-                    printf "${LRED} Error - expected a number.\n$CESC"
+                    printf "${LRED}Error - expected a number.\n$CESC"
                     usage_dlogs
                     return 1
                  ;;
@@ -453,7 +453,7 @@ dinsp() {
 #
 dlist() {
     if [[ ! $# -ge 1 ]]; then
-        printf "${LRED}No arguments passed.$CESC\n"
+        printf "${LRED}Error - No arguments passed.$CESC\n"
         usage_dlist
         return 1
     fi
@@ -465,12 +465,21 @@ dlist() {
     local images=""
     local services=""
 
-    while getopts "cis" flag
+    while test $# != 0
     do
-        case $flag in
-            c) $withContainer=1 ;;
-            i) $withImages=1;;
-            s) $withServices=1;;
+        case $1 in
+            -c) 
+                $withContainer=1 
+                shift 
+            ;;
+            -i) 
+                $withImages=1
+                shift    
+            ;;
+            -s) 
+                $withServices=1
+                shift
+            ;;
         esac
     done
 
