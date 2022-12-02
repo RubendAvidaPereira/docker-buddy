@@ -485,17 +485,17 @@ dlist() {
 
     if [[ $withContainer -eq 1 ]]; then
         $containers="$(docker container ls)"
-        printf "$containers"
+        printf "$containers\n"
     fi
 
     if [[ $withImages -eq 1 ]]; then
         $images="$(docker image ls)"
-        printf "$images"
+        printf "$images\n"
     fi
 
     if [[ $withServices -eq 1 ]]; then
         $services="$(docker service ls)"
-        printf "$services"
+        printf "$services\n"
     fi
 
     unset $container
