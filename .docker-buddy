@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Author: Ruben Pereira
-# Version: 1.0.8
+# Version: 1.0.9
 
 #--------------------------------------------------------------------------- Help and Documentation
 #
@@ -454,7 +454,11 @@ dinsp() {
 # Can be used with flags:
 #   -> -c for containers
 #   -> -i for images
+#   -> -n for networks
 #   -> -s for services
+#   -> -S or --secrets for secrets
+#   -> -v for volumes
+#
 # The flags can be combined in order to output multiple ls results
 #
 dlist() {
@@ -466,10 +470,17 @@ dlist() {
 
     local withContainer=0
     local withImages=0
+    local withNetworks=0
     local withServices=0
+    local withSecrets=0
+    local withVolumes=0
+
     local containers=""
     local images=""
     local services=""
+    local secrets=""
+    local networks=""
+    local volumes=""
 
     while test $# != 0
     do
@@ -482,8 +493,20 @@ dlist() {
                 withImages=1
                 shift    
             ;;
+            -n)
+                withNetworks=1
+                shift
+            ;;
             -s) 
                 withServices=1
+                shift
+            ;;
+            -S|--secrets)
+                withSecrets=1
+                shift
+            ;;
+            -v)
+                withVolumes=1
                 shift
             ;;
         esac
@@ -499,14 +522,33 @@ dlist() {
         printf "$images\n"
     fi
 
+    if [[ $withNetworks -eq 1 ]]; then
+        networks="$(docker network ls)"
+        printf "$networks\n"
+    fi
+
     if [[ $withServices -eq 1 ]]; then
         services="$(docker service ls)"
         printf "$services\n"
     fi
 
+    if [[ $withSecrets -eq 1 ]]; then
+        secrets="$(docker secret ls)"
+        printf "$secrets\n"
+    fi
+
+    if [[ $withVolumes -eq 1 ]]; then
+        volumes="$(docker volume ls)"
+        printf "$volumes\n"
+    fi
+
     unset container
     unset images
     unset services
+    unset secrets
+    unset networks
+    unset volumes
+
     return 0
 }
 
