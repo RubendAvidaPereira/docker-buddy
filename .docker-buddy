@@ -509,6 +509,11 @@ dlist() {
                 withVolumes=1
                 shift
             ;;
+            *)
+                printf "${LRED}Error - Argument passed: $1 not used in dlist.$CESC\n"
+                usage_dlist
+                return 1
+            ;;
         esac
     done
 
