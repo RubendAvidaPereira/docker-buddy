@@ -181,12 +181,9 @@ usage_dlist(){
     #   -c -> Use -c for docker container ls  
     #   -i -> Use -i for docker image ls      
     #   -n -> Use -n for docker network ls   
-    #   -s -> Use -n for docker service ls 
+    #   -s -> Use -s for docker service ls 
     #   -S -> Use -S for docker secret ls 
     #   -v -> Use .v for docker volume ls    
-    #                                                               
-    #   The three flags can be combined for a combined output                  
-    #   with docker ls.                                      
     #
     #   Example:
     #    ${LGREEN}dlist -c$CESC
@@ -195,7 +192,22 @@ usage_dlist(){
     \n"
 }
 
-#usage_dclean(){}
+usage_dclean(){
+    printf "\n
+    # [ COMMAND dclean ]
+    #                                                               
+    #   -c -> Use -c for docker container rm $(docker container ls -q)  
+    #   -i -> Use -i for docker image rm $(docker image ls -q)      
+    #   -n -> Use -n for docker network rm $(docker network ls -q)   
+    #   -s -> Use -s for docker secret rm $(docker secret ls -q) 
+    #   -v -> Use -v for docker volume rm $(docker volume ls -q)                                    
+    #
+    #   Example:
+    #    ${LGREEN}dclean -c${CESC}
+    #    ${LGREEN}dclean -i${CESC}
+    #    ${LGREEN}dclean -c -i -s${CESC} 
+    \n"
+}
 
 # -------------------------------------------- Usage Docker Compose
 usage_dcbuild(){
