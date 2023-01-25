@@ -488,6 +488,13 @@ dswarm() {
         done
     fi
 
+    # Throw error
+    if [[ -n "$error_msg" ]]; then
+        printf "${LRED}Error - $error_msg.\n${CESC}"
+        usage_dswarm
+        return 1
+    fi
+
     # Run the commands if valid usage was caught
     if [[ -n "$command" && -n "$1" ]]; then
         $command $1
@@ -495,12 +502,6 @@ dswarm() {
         $command
     fi
 
-    # Throw error
-    if [[ -n "$error_msg" ]]; then
-        printf "${LRED}Error - $error_msg.\n${CESC}"
-        usage_dswarm
-        return 1
-    fi
     return 0
 }
 
@@ -528,7 +529,8 @@ dcbuild(){
     local error_msg=""
 
     if [[ $# -eq 0 ]]; then
-        error_msg="No arguments passed"
+        docker-compose build
+        return 0
     else
         while getopts "ns:" flag
         do

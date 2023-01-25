@@ -92,7 +92,7 @@ t_ditrun() {
     local error_msg=""
     local flags="-it"
 
-    if [[ $# -lt 2 || ! "$1" =~ PORT_BIND_REGEX ]]; then
+    if [[ $# -lt 2 || ! "$1" =~ $PORT_BIND_REGEX ]]; then
         error_msg="error"
     else
         flags+=" -p $1 $2"
@@ -114,7 +114,7 @@ t_dmitrun() {
     local flags="-it"
 
     # 1st validate inputs
-    if [[ $# -lt 3 || ! "$1" =~ PORT_BIND_REGEX || ! "$2" =~ DIR_BIND_REGEX ]]; then
+    if [[ $# -lt 3 || ! "$1" =~ $PORT_BIND_REGEX || ! "$2" =~ $DIR_BIND_REGEX ]]; then
         error_msg="error"
     else
         # 2nd contruct the command
@@ -245,13 +245,13 @@ t_dinsp() {
 
 #-------------------------------------------------------------------------- Docker Compose Test
 t_dcbuild(){
-        local nocache=""
+    local nocache=""
     local service=""
     local service_name=""
     local error_msg=""
 
     if [[ $# -eq 0 ]]; then
-        error_msg="error"
+        echo "passed"
     else
         while getopts "ns:" flag
         do
@@ -300,6 +300,12 @@ t_dswarm() {
         done
     fi
 
+    # Throw error
+    if [[ -n "$error_msg" ]]; then
+        echo "error"
+        return 1
+    fi
+
     # Run the commands if valid usage was caught
     if [[ -n "$command" && -n "$1" ]]; then
         echo "passed"
@@ -307,10 +313,5 @@ t_dswarm() {
         echo "passed"
     fi
 
-    # Throw error
-    if [[ -n "$error_msg" ]]; then
-        echo "error"
-        return 1
-    fi
     return 0
 }
