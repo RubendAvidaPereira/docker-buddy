@@ -109,7 +109,7 @@ drun() {
     local flags="-d"
 
     # 1st validate inputs
-    if [[ $# -lt 2 || "$1" =~ PORT_BIND_REGEX ]]; then
+    if [[ $# -lt 2 || ! "$1" =~ $PORT_BIND_REGEX ]]; then
         error_msg="${LRED}Error - Invalid arguments passed.${CESC}\n"
     else
         # 2nd construct the command
@@ -153,22 +153,23 @@ dmrun() {
         i=0
         for directory in ${DIR_BIND[@]}
         do
-            if [[ ! -d $directory ]]; then
-                error_msg="${LRED}Error - Directory provided doesn't exist.\n${CESC}"
-                break
-            else
-                directories[i]=$directory
-                ((i++))
-            fi
+            directories[i]=$directory
+            ((i++))
         done
+
+        if [[ ! -d ${directories[0]} ]]; then
+            error_msg="${LRED}Error - Directory provided doesn't exist.\n${CESC}"
+        fi
     fi
 
     if [[ -n "$error_msg" ]]; then
         printf "${error_msg}"
         usage_dmrun
+        return 1
     else
         docker run $flags $3
     fi
+    return 0
 }
 
 # Runs a docker container and starts a bash shell immediately after
@@ -180,7 +181,7 @@ ditrun() {
     local flags="-it"
 
     # 1st validate inputs
-    if [[ $# -lt 2 || ! "$1" =~ PORT_BIND_REGEX ]]; then
+    if [[ $# -lt 2 || ! "$1" =~ $PORT_BIND_REGEX ]]; then
         error_msg="${LRED}Error - Invalid arguments passed.${CESC}\n"
     else
         # 2nd construct the command
@@ -224,14 +225,13 @@ dmitrun() {
         i=0
         for directory in ${DIR_BIND[@]}
         do
-            if [[ ! -d $directory ]]; then
-                error_msg="${LRED}Error - Directory provided doesn't exist.\n${CESC}"
-                break
-            else
-                directories[i]=$directory
-                ((i++))
-            fi
+            directories[i]=$directory
+            ((i++))
         done
+
+        if [[ ! -d ${directories[0]} ]]; then
+            error_msg="${LRED}Error - Directory provided doesn't exist.\n${CESC}"
+        fi
     fi
 
     # Throw error if needed

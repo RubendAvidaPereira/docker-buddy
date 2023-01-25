@@ -42,7 +42,7 @@ t_drun() {
     local error_msg=""
     local flags="-d"
 
-    if [[ $# -lt 2 || "$1" =~ PORT_BIND_REGEX ]]; then
+    if [[ $# -lt 2 || ! "$1" =~ $PORT_BIND_REGEX ]]; then
         error_msg="error"
     else
         echo "passed"
@@ -70,21 +70,22 @@ t_dmrun() {
 
         for directory in ${DIR_BIND[@]}
         do
-            if [[ ! -d $directory ]]; then
-                error_msg="error"
-                break
-            else
-                directories[i]=$directory
-                ((i++))
-            fi
+            directories[i]=$directory
+            ((i++))
         done
+
+        if [[ ! -d ${directories[0]} ]]; then
+            error_msg="error"
+        fi
     fi
 
     if [[ -n "$error_msg" ]]; then
         echo "error"
+        return 1
     else
         echo "passed"
     fi
+    return 0
 }
 
 t_ditrun() {
@@ -128,14 +129,13 @@ t_dmitrun() {
         i=0
         for directory in ${DIR_BIND[@]}
         do
-            if [[ ! -d $directory ]]; then
-                error_msg="error"
-                break
-            else
-                directories[i]=$directory
-                ((i++))
-            fi
+            directories[i]=$directory
+            ((i++))
         done
+
+        if [[ ! -d ${directories[0]} ]]; then
+            error_msg="error"
+        fi
     fi
 
     # Throw error if needed
