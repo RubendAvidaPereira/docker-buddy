@@ -59,7 +59,7 @@ usage_drun(){
     #   without the mount volume option, The image name is optional.
     #                                                                                     
     #   Example:                                                                        
-    #    ${LGREEN}dmrun 80:80 my_container my_image_name$CESC                    
+    #    ${LGREEN}drun 80:80 my_container my_image_name$CESC                    
     \n" 
 }
 

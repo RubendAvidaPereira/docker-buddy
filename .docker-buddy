@@ -422,10 +422,10 @@ dlist() {
 #
 # Can be used with flags:
 #   -> -c for containers
-#   -> -s for secrets 
-#   -> -v for volumes
 #   -> -i for images
 #   -> -n for networks
+#   -> -s for secrets 
+#   -> -v for volumes
 #
 dclean() {
     local error_msg=""
