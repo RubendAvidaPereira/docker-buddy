@@ -563,13 +563,13 @@ dcbuild(){
 #   -> -s <service_name> 
 #   -> -b for build 
 #
-dcup(){
-    local serviceName=""
-    local withBuild=0
+# dcup(){
+#     local serviceName=""
+#     local withBuild=0
 
-    if [[ $# -eq 0 ]]; then
-        docker-compose up
-    else
-        # TODO
-    fi
-}
+#     if [[ $# -eq 0 ]]; then
+#         docker-compose up
+#     else
+#         # TODO
+#     fi
+# }
