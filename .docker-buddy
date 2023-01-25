@@ -481,7 +481,6 @@ dswarm() {
                 -i|--init) command="docker swarm init" ;;
                 -w|--worker) command="docker swarm join-token worker" ;;
                 -m|--manager) command="docker swarm join-token manager" ;;
-                -j|--join) command="docker swarm join --token" ;;
                 *) error_msg="Argument $1 not used in dswarm"
             esac
             shift
@@ -496,9 +495,7 @@ dswarm() {
     fi
 
     # Run the commands if valid usage was caught
-    if [[ -n "$command" && -n "$1" ]]; then
-        $command $1
-    elif [[ -n "$command" ]]; then
+    if [[ -n "$command" ]]; then
         $command
     fi
 

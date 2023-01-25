@@ -419,7 +419,7 @@ __test_dcbuild(){
 # Testing dswarm command
 #
 __test_dswarm(){
-    local test_pass=($(t_dswarm -i) $(t_dswarm -m) $(t_dswarm -w) $(t_dswarm -j my_token))
+    local test_pass=($(t_dswarm -i) $(t_dswarm -m) $(t_dswarm -w))
     local test_exception=($(t_dswarm) $(t_dcbuild -n) $(t_dcbuild -d))
 
     printf "[ Testing dswarm ]\n"
