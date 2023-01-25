@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Author: Ruben Pereira
-# Version: 1.0.9
+# Version: 1.1.0
 
 # This file has minor alterations compared to the .docker-buddy file,
 # its purpose is to unit test all docker-buddy functions
@@ -26,48 +26,29 @@ DIR_BIND_REGEX="^([\/][a-zA-Z0-9_-]{1,}[^\/]):([\/][a-zA-Z0-9_-]{1,}[^\/])$"
 t_dbuild() {
     if [[ $# == 0 ]]; then
         echo "error"
-        return 0
-    fi
-
-    if [[ $# -ge 1 ]]; then
-        if [[ -z "$2" ]]; then
-           echo "passed"
-           return 0
-        fi
-
-        if [[ -d "$2" ]]; then
-            echo "passed"
-            return 0
-        else
-            echo "error"
-            return 1
-        fi
+        return 1
+    elif [[ -z "$2" ]]; then
+        echo "passed"
+    elif [[ -d "$2" ]]; then
+        echo "passed"
+    else
+        echo "error"
+        return 1
     fi
     return 0
 }
  
 t_drun() {
-    # Check if no arguments are passed
-    if [[ $# == 0 ]]; then
-        echo "error"
-        return 1
-    fi
+    local error_msg=""
+    local flags="-d"
 
-    # Command needs at least 2 arguments to run
-    if [[ $# -ge 2 ]]; then
-        if [[ "$1" =~ $PORT_BIND_REGEX ]]; then
-            if [ -z "$3" ]; then
-                echo "passed"
-                return 0
-            else
-                echo "passed"
-                return 0
-            fi
-        else
-            echo "error"
-            return 1
-        fi
+    if [[ $# -lt 2 || "$1" =~ PORT_BIND_REGEX ]]; then
+        error_msg="error"
     else
+        echo "passed"
+    fi
+    
+    if [[ -n "$error_msg" ]]; then
         echo "error"
         return 1
     fi
@@ -75,148 +56,104 @@ t_drun() {
 }
 
 t_dmrun() {
-    # Checking if no arguments passed
-    if [[ $# == 0 ]]; then
-        echo "error"
-        return 1
-    fi
+    local error_msg=""
+    local flags=""
 
-    # Command needs at least 3 arguments to run
-    if [[ $# -ge 3 ]]; then
-        # Testing port bind pattern
-        if [[ ! "$1" =~ $PORT_BIND_REGEX ]]; then
-            echo "error"
-            return 1
-        # Testing directory mapping pattern
-        elif [[ ! "$2" =~ $DIR_BIND_REGEX ]]; then
-            echo "error"
-            return 1
-        else
-            # Split the 2nd argument to verify if directory exists
-            # Using IFS variable (Internal Field Separator) to separate 1st from 2nd directory in for loop
-            IFS=":"
-            DIR_BIND=($2)
-            
-            # Declaring directories array
-            local -a directories
-            i=0
-            
-            for directory in "${DIR_BIND[@]}"
-            do
+    # Check for correct arguments usage
+    if [[ $# -lt 3 || ! "$1" =~ $PORT_BIND_REGEX || ! "$2" =~ $DIR_BIND_REGEX ]]; then
+        error_msg="error"
+    else
+        IFS=":"
+        DIR_BIND=($2)
+        declare -a directories
+        i=0
+
+        for directory in ${DIR_BIND[@]}
+        do
+            if [[ ! -d $directory ]]; then
+                error_msg="error"
+                break
+            else
                 directories[i]=$directory
                 ((i++))
-            done
-
-            if [[ ! -d ${directories[0]} ]]; then
-                echo "error"
-                return 1
-            else
-                if [[ -z $4 ]]; then
-                    echo "passed"
-                else
-                    echo "passed"
-                fi
             fi
-            return 0
-        fi
-    else
-        echo "error"
-        return 1
+        done
     fi
 
-    unset directories
-    return 0
+    if [[ -n "$error_msg" ]]; then
+        echo "error"
+    else
+        echo "passed"
+    fi
 }
 
 t_ditrun() {
-    # Checking if no arguments passed
-    if [[ $# == 0 ]]; then
-        echo "error"
-        return 1
+    local error_msg=""
+    local flags="-it"
+
+    if [[ $# -lt 2 || ! "$1" =~ PORT_BIND_REGEX ]]; then
+        error_msg="error"
+    else
+        flags+=" -p $1 $2"
+        if [[ -n "$3" ]]; then
+            flags+=" --name $3"
+        fi
+        echo "passed"
     fi
 
-    if [[ $# -ge 2 ]]; then
-        if [[ "$1" =~ $PORT_BIND_REGEX ]]; then
-            if [[ -z "$3" ]]; then
-                echo "passed"
-            else
-                echo "passed"
-            fi
-        else
-            echo "error"
-            return 1
-        fi
-    else 
-        echo "error"
+    if [[ -n "$error_msg" ]]; then
+        printf "${error_msg}"
         return 1
     fi
     return 0
 }
 
 t_dmitrun() {
-    # Checking if no arguments passed
-    if [[ $# == 0 ]]; then
-        echo "error"
-        return 1
-    fi
+    local error_msg=""
+    local flags="-it"
 
-    if [[ $# -ge 3 ]]; then
-        if [[ ! "$1" =~ $PORT_BIND_REGEX ]]; then
-            echo "error"
-            return 1
-        else
-            if [[ ! "$2" =~ $DIR_BIND_REGEX ]]; then
-                echo "error"
-                return 1
-            else
-                # Split the 2nd argument to verify if directory exists
-                # Using IFS variable (Internal Field Separator) to separate 1st from 2nd directory in for loop
-                IFS=":"
-                DIR_BIND=($2)
-                
-                # Declaring directories array
-                local -a directories
-                i=0
-                
-                for directory in "${DIR_BIND[@]}"
-                do
-                    directories[i]=$directory
-                    ((i++))
-                done
-
-                if [[ ! -d ${directories[0]} ]]; then
-                    echo "error"
-                    return 1
-                else
-                    if [[ -z "$4" ]]; then
-                        echo "passed"
-                    else
-                        echo "passed"
-                    fi
-                fi
-            fi
+    # 1st validate inputs
+    if [[ $# -lt 3 || ! "$1" =~ PORT_BIND_REGEX || ! "$2" =~ DIR_BIND_REGEX ]]; then
+        error_msg="error"
+    else
+        # 2nd contruct the command
+        flags+=" -p $1 -v $2"
+        if [[ -n "$4" ]]; then
+            flags+=" --name $4"
         fi
-    else 
-        echo "error"
-        return 1
+
+        IFS=":"
+        DIR_BIND=($2)
+        declare -a directories
+        i=0
+        for directory in ${DIR_BIND[@]}
+        do
+            if [[ ! -d $directory ]]; then
+                error_msg="error"
+                break
+            else
+                directories[i]=$directory
+                ((i++))
+            fi
+        done
     fi
 
-    unset directories
+    # Throw error if needed
+    if [[ -n "$error_msg" ]]; then
+        echo "error"
+        return 1
+    else
+        echo "passed"
+    fi
     return 0
 }
 
 t_dexec() {
-    if [[ $# == 0 ]]; then
-        echo "error"
-        return 1
+    # 1st validate usage
+    if [[ $# -lt 1 || $# -gt 1 ]]; then
+       echo "error"
     else
-        if [[ $# -gt 1 ]]; then
-            echo "error"
-            return 1
-        else
-            echo "passed"
-            return 0
-        fi
+        echo "passed"
     fi
     return 0
 }
@@ -233,144 +170,147 @@ t_dgrep() {
 
 t_dlogs() {
     local is_number="^[0-9]{0,5}$"
+    local options=""
+    local error_msg=""
+    local container_name=""
 
-    if [[ ($# -ge 1) ]]; then
-        if [[ ! "$1" = "-d" && ! "$1" = "-t" ]]; then
-            echo "passed"
-            return 0
-        fi
-
+    if [[ $# -eq 0 ]]; then
+        error_msg="error"
+    else
         while test $# != 0
         do
             case $1 in
-                -d|--details)
-                    if [[ ! -z "$2" ]]; then
-                        echo "passed"
-                        return 0
-                    fi
-
-                    if [[ "$2" = "-t" ]]; then
-                        if [[ ! $3 =~ $is_number ]]; then
-                            echo "error"
-                            return 1
-                        else
-                            if [[ -z "$4" ]]; then
-                                echo "error"
-                                return 1
-                            else
-                                echo "passed"
-                                return 0
-                            fi
-                        fi
-                    fi 
-
-                    echo "error"
-                    return 1
-                ;;
-                -t|--tail) 
+                -d|--details) options+=" --details";;
+                -t|--tail)
                     if [[ $2 =~ $is_number ]]; then
-                        if [[ "$3" = "-d" && ! -z "$4" ]]; then
-                            echo "passed"
-                            return 0
-                        elif [[ ! -z "$3" ]]; then
-                            echo "passed"
-                            return 0
-                        else
-                            echo "error"
-                            return 1
-                        fi
+                        options+=" -n $2"
+                        shift
+                    else
+                        error_msg="${LRED}Error - Expected a number\n.${CESC}"
                     fi
-                    
-                    echo "error"
-                    return 1
-                 ;;
+                ;;
+                *)
+                    if [[ -z "$container_name" ]]; then
+                        container_name="$1"
+                    else
+                        error_msg="${LRED}Error - Invalid arguments passed\n.${CESC}"
+                    fi
+                ;;
             esac
+            shift
         done
-    else
+    fi
+
+    if [[ -n "$error_msg" ]]; then
         echo "error"
         return 1
+    fi
+
+    if [[ -z "$container_name" ]]; then
+        echo "error"
+        return 1
+    else
+        echo "passed"
     fi
 }
 
 t_dinsp() {
-    if [[ $# -ge 1 ]]; then
-        while test $# != 0
-        do
-            case "$1" in
-                -c) # Check for -c flag
-                    if [[ -z $2 ]] || [[ $2 = '-i' || $2 = '-n' ]]; then
-                        echo "error"
-                        return 1
-                    else
-                        echo "passed"
-                        return 0
-                    fi ;;
-                -i) # Check for -i flag
-                    if [[ -z $2 ]] || [[ $2 = '-c' || $2 = '-n' ]]; then
-                        echo "error"
-                        return 1
-                    else
-                        echo "passed"
-                        return 0
-                    fi ;;
-                -n) # Check for -n flag
-                    if [[ -z $2 ]] || [[ $2 = '-c' || $2 = '-i' ]]; then
-                        echo "error"
-                        return 1
-                    else
-                        echo "passed"
-                        return 0
-                    fi ;;
-            esac
-            shift
-        done
-        return 0
+    local command=""
+    local error_msg=""
+
+    if [[ $# -lt 1 ]]; then
+        error_msg="error"
     else
+        case  "$1" in
+            -c) command="docker container inspect" ;;
+            -i) command="docker image inspect" ;;
+            -n) command="docker network inspect" ;;
+            *) error_msg="Invalid arguments passed" ;;
+        esac
+    fi
+    shift
+
+    if [[ -z $1 ]]; then
+        echo "error"
+    else
+        echo "passed"
+    fi
+
+    if [[ -n "$error_msg" ]]; then
         echo "error"
         return 1
-    fi 
+    fi
+    return 0
 }
 
 #-------------------------------------------------------------------------- Docker Compose Test
 t_dcbuild(){
-    local nocache=0
-    local specific=0
+        local nocache=""
+    local service=""
     local service_name=""
-    
+    local error_msg=""
+
     if [[ $# -eq 0 ]]; then
-        echo "passed"
-        return 0
+        error_msg="error"
     else
         while getopts "ns:" flag
         do
             case $flag in
-                n) nocache=1 ;;
-                s) specific=1
-                   service_name="$OPTARG" ;;
-                \?) echo "error"
-                    return 1 
+                n) nocache="--no-cache" ;;
+                s) 
+                    service="--service"
+                    service_name="$OPTARG"
                 ;;
+                \?) error_msg="erro" ;;
             esac
         done
-
-        if [[ $specific -eq 1 && $nocache -eq 1 && ! -z "$service_name" ]]; then
-            echo "passed"
-            unset $service_name
-            return 0
-        fi
-
-        if [[ $specific -eq 1 && ! -z "$service_name" ]]; then
-            echo "passed"
-            unset $service_name
-            return 0
-        fi
-
-        if [[ $nocache -eq 1 ]]; then
-            echo "passed"
-            return 0
-        fi
-
-        echo "error"
-        return 1  
     fi
+
+    if [[ -n "$error_msg" ]]; then
+        echo "error"
+        return 1
+    elif [[ -z "$service_name" ]]; then
+        service=""
+    else
+        echo "passed"
+    fi
+    return 0
+}
+
+t_dswarm() {
+    local swarm_init=0
+    local swarm_worker=0
+    local swarm_manager=0
+    local error_msg=""
+    local command=""
+
+    if [[ $# -eq 0 ]]; then
+        error_msg="error"
+    else
+        while test $# != 0
+        do
+            case $1 in 
+                -i|--init) command="docker swarm init" ;;
+                -w|--worker) command="docker swarm join-token worker" ;;
+                -m|--manager) command="docker swarm join-token manager" ;;
+                -j|--join) command="docker swarm join --token" ;;
+                *) error_msg="error"
+            esac
+            shift
+        done
+    fi
+
+    # Run the commands if valid usage was caught
+    if [[ -n "$command" && -n "$1" ]]; then
+        echo "passed"
+    elif [[ -n "$command" ]]; then
+        echo "passed"
+    fi
+
+    # Throw error
+    if [[ -n "$error_msg" ]]; then
+        echo "error"
+        return 1
+    fi
+    return 0
 }

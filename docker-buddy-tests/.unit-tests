@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Author: Ruben Pereira
-# Version: 1.0.9
+# Version: 1.1.0
 
 # This file is intended to provide unit testing for the docker-buddy
 #
@@ -55,6 +55,13 @@ test_dbuddy(){
     __test_dcbuild
     sleep 1
     printf "\n"
+
+    printf "[ Testing Docker Buddy - Docker Swarm implementation ]\n"
+
+    __test_dswarm
+    sleep 1
+    printf "\n"
+
 }
 
 #--------------------------------------------------------- DOCKER
@@ -302,7 +309,7 @@ __test_dgrep(){
 }
 
 #
-# Testing dinsp command
+# Testing dlogs command
 #
 __test_dlogs(){
     local test_pass=($(t_dlogs my_container) $(t_dlogs -t 10 my_container) $(t_dlogs -d -t 10 my_container) $(t_dlogs -d my_container))
@@ -380,6 +387,42 @@ __test_dcbuild(){
     local test_exception=($(t_dcbuild -s) $(t_dcbuild -ns))
 
     printf "[ Testing dcbuild ]\n"
+
+    # Testing for correct usage
+    local j=0
+    for i in "${test_pass[@]}"
+    do
+        if [[ $i = "passed" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+
+    # Testing for wrong usage
+    for i in "${test_exception[@]}"
+    do
+        if [[ $i = "error" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+}
+
+#-------------------------------------------------- DOCKER SWARM
+#
+# Testing dswarm command
+#
+__test_dswarm(){
+    local test_pass=($(t_dswarm -i) $(t_dswarm -m) $(t_dswarm -w) $(t_dswarm -j my_token))
+    local test_exception=($(t_dswarm) $(t_dcbuild -z) $(t_dcbuild -y))
+
+    printf "[ Testing dswarm ]\n"
 
     # Testing for correct usage
     local j=0

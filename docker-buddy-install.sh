@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Author: Ruben Pereira
-# Version: 1.0.9
+# Version: 1.1.0
 
 # This file is a simple script for the docker-buddy installation
 #   
@@ -18,24 +18,19 @@
 user=$(whoami)
 file="/home/$user/.bashrc"
 
-# 2. Append multiple lines with '>>' and 'cat', EOT represents end of file
-cat << EOT >> $file
-if [ -f ~/docker-buddy/.docker-buddy ]; then
-   source ~/docker-buddy/.docker-buddy
-fi
+# 2. Set the path to the docker-buddy files
+docker_buddy_path=~/docker-buddy
 
-if [ -f ~/docker-buddy/.docker-buddy-usage ]; then
-   source ~/docker-buddy/.docker-buddy-usage
-fi
+# 3. Array of files to source
+files=(".docker-buddy" ".docker-buddy-usage" "docker-buddy-tests/.docker-buddy-test" "docker-buddy-tests/.unit-tests")
 
-if [ -f ~/docker-buddy/docker-buddy-tests/.docker-buddy-test ]; then
-   source ~/docker-buddy/docker-buddy-tests/.docker-buddy-test
-fi
+# 4. Iterate over the array and source the files if they exist
+for file in "${files[@]}"
+do
+   if [ -f "$docker_buddy_path/$file" ]; then
+      echo "source $docker_buddy_path/$file" >> $file
+   fi
+done
 
-if [ -f ~/docker-buddy/docker-buddy-tests/.unit-tests ]; then
-   source ~/docker-buddy/docker-buddy-tests/.unit-tests
-fi
-EOT
-
-# 3. Execute bash for docker buddy ready to use
+# 5. Execute bash for docker buddy ready to use
 exec bash
