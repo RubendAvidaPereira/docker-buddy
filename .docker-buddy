@@ -437,7 +437,7 @@ dclean() {
         do
             case $1 in 
                 -c|--containers) docker container rm $(docker container ls -q) ;;
-                -i|--images docker image rm $(docker image ls -q) ;;
+                -i|--images) docker image rm $(docker image ls -q) ;;
                 -n|--networks) docker network rm $(docker network ls -q) ;;
                 -s|--secrets) docker secret rm $(docker secret ls -q) ;;
                 -v|--volumes) docker volume rm $(docker volume ls -q) ;;
