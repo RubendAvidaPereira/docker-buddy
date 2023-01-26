@@ -15,8 +15,7 @@
 #
 
 # 1. Set the file to write to
-user=$(whoami)
-file="/home/$user/.bashrc"
+bashrc_path="/home/$(whoami)/.bashrc"
 
 # 2. Set the path to the docker-buddy files
 docker_buddy_path=~/docker-buddy
@@ -28,9 +27,9 @@ files=(".docker-buddy" ".docker-buddy-usage" "docker-buddy-tests/.docker-buddy-t
 for file in "${files[@]}"
 do
    if [ -f "$docker_buddy_path/$file" ]; then
-      echo "source $docker_buddy_path/$file" >> $file
+      echo "source $docker_buddy_path/$file" >> $bashrc_path
    fi
 done
 
 # 5. Execute bash for docker buddy ready to use
-exec bash
+source $bashrc_path
