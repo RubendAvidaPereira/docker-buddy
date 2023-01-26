@@ -10,6 +10,17 @@ For instances if we want to build a docker container just use the following code
 
 `dbuild my_container`
 
+## Install the Docker Buddy
+It's quite easy, after making the git clone command of the repository, switch to the folder with `cd docker-buddy/` and do the following: 
+
+```bash
+1st -> chmod +x ./docker-buddy-install.sh
+
+2nd -> ./docker-buddy-install.sh
+
+3rd -> you are welcome buddy :D
+```
+
 ## Commands
 
 ### Docker
