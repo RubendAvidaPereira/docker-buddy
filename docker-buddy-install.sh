@@ -32,4 +32,4 @@ do
 done
 
 # 5. Execute bash for docker buddy ready to use
-source $bashrc_path
+exec bash
