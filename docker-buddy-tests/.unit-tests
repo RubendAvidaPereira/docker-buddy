@@ -23,43 +23,46 @@ test_dbuddy(){
     printf "[ Testing Docker Buddy - Docker implementation ]\n"
 
     __test_dbuild
-    sleep 1
+    sleep 0.5
     printf "\n"
     __test_drun
-    sleep 1
+    sleep 0.5
     printf "\n"
     __test_dmrun
-    sleep 1
+    sleep 0.5
     printf "\n"
     __test_ditrun
-    sleep 1
+    sleep 0.5
     printf "\n"
     __test_dmitrun
-    sleep 1
+    sleep 0.5
     printf "\n"
     __test_dexec
-    sleep 1
+    sleep 0.5
     printf "\n"
     __test_dgrep
-    sleep 1
+    sleep 0.5
     printf "\n"
     __test_dlogs
-    sleep 1
+    sleep 0.5
     printf "\n"
     __test_dinsp
-    sleep 1
+    sleep 0.5
     printf "\n"
 
     printf "[ Testing Docker Buddy - Docker Compose implementation ]\n"
 
     __test_dcbuild
-    sleep 1
+    sleep 0.5
+    printf "\n"
+    __test_dcup
+    sleep 0.5
     printf "\n"
 
     printf "[ Testing Docker Buddy - Docker Swarm implementation ]\n"
 
     __test_dswarm
-    sleep 1
+    sleep 0.5
     printf "\n"
 
 }
@@ -387,6 +390,41 @@ __test_dcbuild(){
     local test_exception=($(t_dcbuild -s) $(t_dcbuild -ns))
 
     printf "[ Testing dcbuild ]\n"
+
+    # Testing for correct usage
+    local j=0
+    for i in "${test_pass[@]}"
+    do
+        if [[ $i = "passed" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+
+    # Testing for wrong usage
+    for i in "${test_exception[@]}"
+    do
+        if [[ $i = "error" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+}
+
+#
+# Testing dcup command
+#
+__test_dcup(){
+    local test_pass=($(t_dcup) $(t_dcbuild -s my_service) $(t_dcup -b) $(t_dcup -b -s my_service))
+    local test_exception=($(t_dcbuild --notvalid))
+
+    printf "[ Testing dcup ]\n"
 
     # Testing for correct usage
     local j=0

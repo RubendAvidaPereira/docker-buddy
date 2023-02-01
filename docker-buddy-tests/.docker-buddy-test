@@ -277,6 +277,33 @@ t_dcbuild(){
     return 0
 }
 
+t_dcup(){
+    local serviceName=""
+    local command="docker-compose up -d"
+    local withBuild=0
+
+    if [[ $# -eq 0 ]]; then
+        echo "passed"
+    else
+        while test $# != 0
+        do
+            case $1 in
+                -b|--build) command+=" --build" ;;
+                -s|--service) command+=" $2" ;;
+                *) 
+                    echo "error" 
+                    return 1
+                ;;
+            esac
+            shift
+        done
+
+        echo "passed"
+        return 0
+    fi
+}
+
+#-------------------------------------------------------------------------- Docker Swarm Test
 t_dswarm() {
     local swarm_init=0
     local swarm_worker=0

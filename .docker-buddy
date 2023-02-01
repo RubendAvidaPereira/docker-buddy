@@ -575,12 +575,16 @@ dcup(){
         do
             case $1 in
                 -b|--build) command+=" --build" ;;
-                -s|--service) command+=" $2"
+                -s|--service) command+=" $2" ;;
+                *) 
+                    usage_dcup 
+                    return 1
+                ;;
             esac
             shift
         done
 
-        printf "$command"
+        $command
         return 0
     fi
 }

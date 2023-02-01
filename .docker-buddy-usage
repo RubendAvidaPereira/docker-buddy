@@ -36,6 +36,7 @@ usage_general(){
 
     # ${LBLUE}[ DOCKER-COMPOSE USAGE ]$CESC
     $(usage_dcbuild)
+    $(usage_dcup)
     \n"
 }
 
@@ -211,7 +212,7 @@ usage_dclean(){
 
 # -------------------------------------------- Usage Docker Compose
 usage_dcbuild(){
-        printf "\n
+    printf "\n
     # [ COMMAND dcbuild ]
     #                                                               
     #   -n -> Use -n for docker compose build --no-cache  
@@ -219,6 +220,23 @@ usage_dcbuild(){
     #                                                               
     #   The two flags can be combined for a build context                  
     #   with no cache and a specific service.            
+    #
+    #   Example:
+    #    ${LGREEN}dcbuild$CESC
+    #    ${LGREEN}dcbuild -n$CESC
+    #    ${LGREEN}dcbuild -s my_service$CESC
+    \n"
+}
+
+usage_dcup(){
+    printf "\n
+    # [ COMMAND dcup ]
+    #                                                               
+    #   -b -> Use -n for docker compose up -d --build  
+    #   -s -> Use -s for docker compose up -d <service_name>          
+    #                                                               
+    #   The two flags can be combined for a build context                  
+    #   and a specific service.            
     #
     #   Example:
     #    ${LGREEN}dcbuild$CESC
