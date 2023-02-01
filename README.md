@@ -24,6 +24,7 @@ It's quite easy, after making the git clone command of the repository, switch to
 ## Commands
 
 ### Docker
+
 - #### dbuddy command
     - The **dbuddy** command can be used with two flags ***-v*** or ***-h***, both are well known typical linux environment flags. One gives the version, the other one offers help, accordingly. Let's see an example:
 
@@ -133,3 +134,47 @@ It's quite easy, after making the git clone command of the repository, switch to
     `-s or --secrets for secrets`
 
     `-v or --volumes for volumes`
+
+### Docker-Compose
+
+- #### dcup command
+    - The **dcup** command enables the user to get support for docker-compose up command, the command will execute 
+    docker-compose up command with -d by default, to deploy the services in detached mode.
+
+    - The command can be used with two flags: `-b` or `-s`, with the first one enables the docker-compose up to build the image before and the second one is to specify a service (***it only supports 1 for now...***).
+
+    - The command usage is as follows:
+    
+    `dcup`
+
+    `dcup -b`
+
+    `dcup -b -s my_service`
+
+- #### dcbuild command
+    - The **dcbuild** command it is similar to the dcup, bu doesn't start the container. It only builds the context.
+
+    - The command can be used with 2 flags: `-n` and `-s`, like before the second one is to specify a service, the first one is to do a build context with no cache.
+
+    - Usage is as follows:
+
+    `dcbuild`
+
+    `dcbuild -n`
+
+    `dcbuild -n -s my_service`
+
+### Docker Swarm
+
+- #### dswarm command
+    - The **dswarm** command enables the user to start a docker swarm, to get the tokens to add a worker or a manager or join a docker swarm with the generated token.
+
+    - The command has 4 flags and the usage is as follows: (***only one flag supported***)
+
+    `dswarm -i` - Starts a docker swarm
+
+    `dswarm -w` - Generates a join token for a worker
+
+    `dswarm -m` - Generates a join token for a manager
+
+    `dswarm -j <token>` - For a node to join a swarm
