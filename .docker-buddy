@@ -58,6 +58,7 @@ dbuddy() {
             usage_general 
             return 0    
         ;;
+        *) return 1 ;;
         esac
     done
     return 0
@@ -562,13 +563,24 @@ dcbuild(){
 #   -> -s <service_name> 
 #   -> -b for build 
 #
-# dcup(){
-#     local serviceName=""
-#     local withBuild=0
+dcup(){
+    local serviceName=""
+    local command="docker-compose up -d"
+    local withBuild=0
 
-#     if [[ $# -eq 0 ]]; then
-#         docker-compose up
-#     else
-#         # TODO
-#     fi
-# }
+    if [[ $# -eq 0 ]]; then
+        $command
+    else
+        while test $# != 0
+        do
+            case $1 in
+                -b|--build) command+=" --build" ;;
+                -s|--service) command+=" $2"
+            esac
+            shift
+        done
+
+        printf "$command"
+        return 0
+    fi
+}
