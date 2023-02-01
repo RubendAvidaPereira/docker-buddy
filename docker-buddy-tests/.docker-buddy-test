@@ -289,7 +289,7 @@ t_dcup(){
         do
             case $1 in
                 -b|--build) command+=" --build" ;;
-                -s|--service) command+=" $2" ;;
+                -s|--service) command+=" $2" shift ;;
                 *) 
                     echo "error" 
                     return 1
