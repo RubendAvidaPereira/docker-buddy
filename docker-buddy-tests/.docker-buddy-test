@@ -278,21 +278,20 @@ t_dcbuild(){
 }
 
 t_dcup(){
-    local error_msg=""
-    local serviceName=""
     local command="docker-compose up -d"
-    local withBuild=0
+    local error_msg=""
 
     if [[ $# -eq 0 ]]; then
-        echo "passed"
+        $command
     else
-        while getopts "bs:" flag
+        while test $# != 0
         do
-            case $flag in
-                b) command+=" --build" ;;
-                s) command+=" $OPTARG" ;;
-                \?) error_msg="error" ;;
+            case $1 in
+                -b|--build) command+=" --build" ;;
+                -s|--service) command+=" $2" shift ;;
+                *) error_msg="Argument passed not supported by command" ;;
             esac
+            shift
         done
 
         if [[ -n "$error_msg" ]]; then
@@ -300,7 +299,7 @@ t_dcup(){
             return 1
         fi
 
-        echo "passed"
+        $command
         return 0
     fi
 }

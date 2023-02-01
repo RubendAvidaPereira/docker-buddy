@@ -564,9 +564,8 @@ dcbuild(){
 #   -> -b for build 
 #
 dcup(){
-    local serviceName=""
     local command="docker-compose up -d"
-    local withBuild=0
+    local error_msg=""
 
     if [[ $# -eq 0 ]]; then
         $command
@@ -575,14 +574,17 @@ dcup(){
         do
             case $1 in
                 -b|--build) command+=" --build" ;;
-                -s|--service) command+=" $2" ;;
-                *) 
-                    usage_dcup 
-                    return 1
-                ;;
+                -s|--service) command+=" $2" shift ;;
+                *) error_msg="Argument passed not supported by command" ;;
             esac
             shift
         done
+
+        if [[ -n "$error_msg" ]]; then
+            printf "${LRED} Error - $error_msg.\n${CESC}"
+            usage_dcup
+            return 1
+        fi
 
         $command
         return 0
