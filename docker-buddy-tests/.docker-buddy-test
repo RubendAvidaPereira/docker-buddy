@@ -278,6 +278,7 @@ t_dcbuild(){
 }
 
 t_dcup(){
+    local error_msg=""
     local serviceName=""
     local command="docker-compose up -d"
     local withBuild=0
@@ -285,18 +286,19 @@ t_dcup(){
     if [[ $# -eq 0 ]]; then
         echo "passed"
     else
-        while test $# != 0
+        while getopts "bs:" flag
         do
-            case $1 in
-                -b|--build) command+=" --build" ;;
-                -s|--service) command+=" $2" shift ;;
-                *) 
-                    echo "error" 
-                    return 1
-                ;;
+            case $flag in
+                b) command+=" --build" ;;
+                s) command+=" $OPTARG" ;;
+                \?) error_msg="error" ;;
             esac
-            shift
         done
+
+        if [[ -n "$error_msg" ]]; then
+            echo "error"
+            return 1
+        fi
 
         echo "passed"
         return 0
