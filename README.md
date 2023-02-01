@@ -1,6 +1,34 @@
 # Docker Buddy
 > by Ruben Pereira, v1.1.0
 
+## Index
+- [Introduction](#introduction)
+
+- [Install the Docker Buddy](#install-the-docker-buddy)
+
+- [Commands](#commands)
+    - [Docker](#docker)
+        - [dbuddy](#dbuddy-command)
+        - [dbuild](#dbuild-command)
+        - [drun](#drun-command)
+        - [dmrun](#dmrun-command)
+        - [ditrun](#ditrun-command)
+        - [dmitrun](#dmitrun-command)
+        - [dexec](#dexec-command)
+        - [dps](#dps-command)
+        - [dgrep](#dgrep-command)
+        - [dlogs](#dlogs-command)
+        - [dinsp](#dinsp-command)
+        - [dlist](#dlist-command)
+        - [dclean](#dclean-command)
+
+    - [Docker-Compose](#docker-compose)
+        - [dcup](#dcup-command)
+        - [dcbuild](#dcbuild-command)
+
+    - [Docker Swarm](#docker-swarm)
+        - [dswarm](#dswarm-command)
+
 ## Introduction
 The main objective is to help the IT enthusiastic human beigns with docker commands. It's just a big set of ready to use and tested docker aliases. (Only working in linux, for now...).
 
