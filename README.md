@@ -53,19 +53,25 @@ It's quite easy, after making the git clone command of the repository, switch to
 
 ### Docker
 
+---
+
 - #### dbuddy command
     - The **dbuddy** command can be used with two flags ***-v*** or ***-h***, both are well known typical linux environment flags. One gives the version, the other one offers help, accordingly. Let's see an example:
 
     `dbuddy -v`
 
     `dbuddy -h`
-    
+
+---
+
 - #### dbuild command
     - The **dbuild** command enables a quick interaction with the common command docker build where a path for a docker file can be included. Let's see the 2 possible use cases:
 
     `dbuild my_container`
 
     `dbuild my_container path/to/my/Dockerfile`
+
+---
 
 - #### drun command
     - The **drun** command enables the user to quickly run a docker container with minimum command line usage (*an image name can be passed or not as option*), the use cases for this command are the following:
@@ -74,12 +80,16 @@ It's quite easy, after making the git clone command of the repository, switch to
 
     `drun 80:80 my_container my_image`
 
+---
+
 - #### dmrun command
     - The **dmrun** command lets the user pass the port binding for the container and also volume binding can be applied, the volume binding as the port binding must be the same as in docker command. The use cases for the command are:
 
     `dmrun 80:80 /home:/path/in/container my_container`
 
     `dmrun 80:80 /home:/path/in/container my_container my_image`
+
+---
 
 - #### ditrun command
     - The **ditrun** command enables the user not only run a docker container as well as entering the docker container cli immediately. The sintax is as follows:
@@ -88,13 +98,17 @@ It's quite easy, after making the git clone command of the repository, switch to
 
     `ditrun 80:80 my_container my_image`
 
+---
+
 - #### dmitrun command
     - The **dmitrun** command is similar to **ditrun**, but as **dmrun** enables the user to prompt a volume binding. The use cases are:
 
     `dmitrun 80:80 /home:/path/in/container my_container`
 
     `dmitrun 80:80 /home:/path/in/container my_container my_images`
-    
+
+---
+
 - #### dexec command
     - The **dexec** command is a simple implementation of the docker exec command. The approach is:
 
@@ -102,15 +116,21 @@ It's quite easy, after making the git clone command of the repository, switch to
 
     - Simple as that, you enter the container cli.
 
+---
+
 - #### dps command
     - The **dps** command is a short alias with a specific output, it returns the container ID, the container name, networks, volumes and status. Usage:
 
     `dps`
 
+---
+
 - #### dgrep command
     - The **dgrep** command is an alias to output docker ps results and filter by container name. Usage:
 
     `dgrep my_container`
+
+---
 
 - #### dlogs command
     - The **dlogs** command returns the logs for a container or image, given an ID. The user can pass two flags combined in order to get different outputs. `-t` or `-d`. The first one must be followed by an integer. The second, like the first one is optional. `-d` is used for more details and `-t` to tail the results, i.e the last lines of logs encountered. The usage is:
@@ -121,6 +141,8 @@ It's quite easy, after making the git clone command of the repository, switch to
 
     `dlogs -d -t 30 my_container_id`
 
+---
+
 - #### dinsp command
     - The **dinsp** command returns the user the output of the docker inspect command,
     with a simple flag, containers, images or networks can be inspected (*must be followed by ID*). Usage is as follows:
@@ -130,6 +152,8 @@ It's quite easy, after making the git clone command of the repository, switch to
     `dinsp -i my_image`
 
     `dinsp -n my_network`
+
+---
 
 - #### dlist command
     - The **dlist** command can combine multiple docker ls commands in one output, imagine you want to list the images and the containers, use the `-i` and `-c` flags, like so: `dlist -i -c`. The flags are:
@@ -145,6 +169,8 @@ It's quite easy, after making the git clone command of the repository, switch to
     `-S or --secrets for secrets`
 
     `-v or --volumes for volumes`
+
+---
 
 - #### dclean command
     - **N.B** - This command force cleans the desired docker "service".
@@ -165,6 +191,8 @@ It's quite easy, after making the git clone command of the repository, switch to
 
 ### Docker-Compose
 
+---
+
 - #### dcup command
     - The **dcup** command enables the user to get support for docker-compose up command, the command will execute 
     docker-compose up command with -d by default, to deploy the services in detached mode.
@@ -178,6 +206,8 @@ It's quite easy, after making the git clone command of the repository, switch to
     `dcup -b`
 
     `dcup -b -s my_service`
+
+---
 
 - #### dcbuild command
     - The **dcbuild** command it is similar to the dcup, bu doesn't start the container. It only builds the context.
@@ -193,6 +223,8 @@ It's quite easy, after making the git clone command of the repository, switch to
     `dcbuild -n -s my_service`
 
 ### Docker Swarm
+
+---
 
 - #### dswarm command
     - The **dswarm** command enables the user to start a docker swarm, to get the tokens to add a worker or a manager or join a docker swarm with the generated token.
