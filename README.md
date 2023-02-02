@@ -15,6 +15,7 @@
         - [ditrun](#ditrun-command)
         - [dmitrun](#dmitrun-command)
         - [dexec](#dexec-command)
+        - [dcreate](#dcreate-command)
         - [dps](#dps-command)
         - [dgrep](#dgrep-command)
         - [dlogs](#dlogs-command)

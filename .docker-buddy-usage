@@ -116,6 +116,21 @@ usage_dexec(){
     \n" 
 }
 
+usage_dcreate() {
+   printf "\n
+    # [ COMMAND dcreate ] 
+    #                                                                                     
+    #   The dcreate command is an interpretation for docker <network|secret|volume> create,
+    #   the usage is: 
+    #                                                                                     
+    #   Example:                                                                        
+    #    ${LGREEN}dcreate -n <bridge|overlay> my_network${CESC}
+    #    ${LGREEN}dcreate -s my_secret_name my_secret_value${CESC}
+    #    ${LGREEN}dcreate -v my_volume${CESC}
+    #                                                        
+    \n" 
+}
+
 usage_dps(){
    printf "\n
     # [ COMMAND dps ] 
@@ -244,3 +259,5 @@ usage_dcup(){
     #    ${LGREEN}dcbuild -s my_service$CESC
     \n"
 }
+
+# -------------------------------------------- Usage Docker Swarm
