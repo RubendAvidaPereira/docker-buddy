@@ -118,6 +118,19 @@ It's quite easy, after making the git clone command of the repository, switch to
 
 ---
 
+- #### dcreate command
+    - The **dcreate** command is a interpretation for the docker <network|secret|volume> create command.
+
+    - The usage is as follows:
+
+    `dcreate -n <bridge|overlay> my_network`
+
+    `dcreate -s my_secret_name my_secret_value`
+
+    `dcreate -v my_volume`
+
+---
+
 - #### dps command
     - The **dps** command is a short alias with a specific output, it returns the container ID, the container name, networks, volumes and status. Usage:
 

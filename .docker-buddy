@@ -260,7 +260,78 @@ dexec() {
     return 0
 }
 
-#------------------------------------------------------------ Inspect Docker Processes Commands
+# Can create anything
+#
+# Can be used with flags:
+#   -> -n for network must be followed by type: bridge or overlay and the name of the network
+#   -> -s for secret must be followed by the name of the secret and secret
+#   -> -v for volume must be followed by the name for the volume
+#
+# Interpretation for docker <network|secret|volume> create
+dcreate() {
+    local error_msg=""
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        -n|--network)
+                if [[ "$2" == "bridge" ]]; then
+                    if [[ -z "$3" ]]; then
+                        error_msg="Network name not provided."
+                        break
+                    fi
+                    docker network create --driver bridge "$3"
+                elif [[ "$2" == "overlay" ]]; then
+                    if [[ -z "$3" ]]; then
+                        error_msg="Network name not provided."
+                        break
+                    fi
+                    docker network create --driver overlay "$3"
+                else
+                    error_msg="Invalid network type. Available options: bridge, overlay."
+                    break
+                fi
+                shift 3
+            ;;
+        -s|--secret)
+                if [[ -z "$2" ]]; then
+                    error_msg="Secret name not provided."
+                    break
+                fi
+                    
+                if [[ -z "$3" ]]; then
+                    error_msg="Secret not provided."
+                    break
+                fi
+                
+                echo "$3" | docker secret create "$2" -
+                shift 3
+            ;;
+        -v|--volume)
+                if [[ -z "$2" ]]; then
+                    error_msg="Volume name not provided."
+                    break
+                fi
+                
+                docker volume create "$2"
+                shift 2
+            ;;
+        *)
+                error_msg="Invalid option $1."
+                break
+            ;;
+        esac
+    done
+
+    if [[ -n "$error_msg" ]]; then
+        printf "${LRED}Error - $error_msg\n${CESC}"
+        usage_dcreate
+        return 1
+    fi
+
+  return 0
+}
+
+
 # Shows current docker processes
 #
 # for docker ps

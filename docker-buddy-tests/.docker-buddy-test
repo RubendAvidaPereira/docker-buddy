@@ -158,6 +158,68 @@ t_dexec() {
     return 0
 }
 
+t_dcreate() {
+    local error_msg=""
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        -n|--network)
+                if [[ "$2" == "bridge" ]]; then
+                    if [[ -z "$3" ]]; then
+                        error_msg="Network name not provided."
+                        break
+                    fi
+                    docker network create --driver bridge "$3"
+                elif [[ "$2" == "overlay" ]]; then
+                    if [[ -z "$3" ]]; then
+                        error_msg="Network name not provided."
+                        break
+                    fi
+                    echo "passed"
+                else
+                    error_msg="Invalid network type. Available options: bridge, overlay."
+                    break
+                fi
+                shift 3
+            ;;
+        -s|--secret)
+                if [[ -z "$2" ]]; then
+                    error_msg="Secret name not provided."
+                    break
+                fi
+                    
+                if [[ -z "$3" ]]; then
+                    error_msg="Secret not provided."
+                    break
+                fi
+                
+                echo "passed"
+                shift 3
+            ;;
+        -v|--volume)
+                if [[ -z "$2" ]]; then
+                    error_msg="Volume name not provided."
+                    break
+                fi
+                
+                echo "passed"
+                shift 2
+            ;;
+        *)
+                error_msg="Invalid option $1."
+                break
+            ;;
+        esac
+    done
+
+    if [[ -n "$error_msg" ]]; then
+        echo "error"
+        return 1
+    fi
+
+  return 0
+}
+
 t_dgrep() {
     if [[ $# -ge 1 ]]; then
         echo "passed"

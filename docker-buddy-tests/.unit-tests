@@ -312,6 +312,41 @@ __test_dgrep(){
 }
 
 #
+# Testing dcreate command
+#
+__test_dcreate(){
+    local test_pass=($(t_dcreate -n bridge my_network) $(t_dcreate -n overlay my_network) $(t_dcreate -s my_name my_secret) $(dcreate -v volume))
+    local test_exception=($(t_dcreate -n notvalid my_network) $(t_dcreate -s my_name) $(t_dcreate -v))
+
+    printf "[ Testing dcreate ]\n"
+
+    # Testing for correct usage
+    local j=0
+    for i in "${test_pass[@]}"
+    do
+        if [[ $i = "passed" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+
+    # Testing for wrong usage
+    for i in "${test_exception[@]}"
+    do
+        if [[ $i = "error" ]]; then
+            ((j++))
+            printf "[Test $j].......................................................[${LGREEN}PASS$CESC]\n"
+        else
+            ((j++))
+            printf "[Test $j].......................................................[${LRED}FAIL$CESC]\n"
+        fi
+    done
+}
+
+#
 # Testing dlogs command
 #
 __test_dlogs(){
