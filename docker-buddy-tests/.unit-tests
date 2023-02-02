@@ -40,6 +40,9 @@ test_dbuddy(){
     __test_dexec
     sleep 0.5
     printf "\n"
+    __test_dcreate
+    sleep 0.5
+    printf "\n"
     __test_dgrep
     sleep 0.5
     printf "\n"

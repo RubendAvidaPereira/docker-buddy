@@ -29,6 +29,7 @@ usage_general(){
     $(usage_ditrun)
     $(usage_dmitrun)
     $(usage_dexec)
+    $(usage_dcreate)
     $(usage_dps)
     $(usage_dgrep)
     $(usage_dinsp)
