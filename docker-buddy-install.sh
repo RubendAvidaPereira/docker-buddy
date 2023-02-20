@@ -18,7 +18,7 @@
 bashrc_path="/home/$(whoami)/.bashrc"
 
 # 2. Set the path to the docker-buddy files
-docker_buddy_path=~/docker-buddy
+docker_buddy_path=$(pwd)
 
 # 3. Array of files to source
 files=(".docker-buddy" ".docker-buddy-usage" "docker-buddy-tests/.docker-buddy-test" "docker-buddy-tests/.unit-tests")
